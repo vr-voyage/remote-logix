@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://LogixNode.tscn" type="PackedScene" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Nodes" type="GridContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+columns = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NodeAbs" parent="Nodes" instance=ExtResource( 1 )]
+margin_left = 0.0
+margin_right = 90.0
+title = "Abs"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color( 1, 1, 1, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 1, 1, 1, 1 )
+input_names = PoolStringArray( "N" )
+
+[node name="InputA" type="LineEdit" parent="Nodes/NodeAbs"]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 74.0
+margin_bottom = 48.0
+
+[node name="NodeAdd" parent="Nodes" instance=ExtResource( 1 )]
+margin_left = 94.0
+margin_right = 184.0
+title = "Add"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color( 1, 1, 1, 1 )
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color( 1, 1, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = true
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = true
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+input_names = PoolStringArray( "A", "B" )
+
+[node name="InputA" type="LineEdit" parent="Nodes/NodeAdd"]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 74.0
+margin_bottom = 48.0
+
+[node name="OutputC" type="HSeparator" parent="Nodes/NodeAdd"]
+margin_left = 16.0
+margin_top = 49.0
+margin_right = 74.0
+margin_bottom = 53.0
+
+[node name="InputB" type="LineEdit" parent="Nodes/NodeAdd"]
+margin_left = 16.0
+margin_top = 54.0
+margin_right = 74.0
+margin_bottom = 78.0
+
+[node name="IntValue" parent="Nodes" instance=ExtResource( 1 )]
+margin_left = 188.0
+margin_right = 278.0
+title = "Int"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color( 1, 1, 1, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 1, 1, 1, 1 )
+
+[node name="TextEdit" type="LineEdit" parent="Nodes/IntValue"]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 74.0
+margin_bottom = 48.0

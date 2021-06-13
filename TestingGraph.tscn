@@ -1,0 +1,197 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://TestingGraph.gd" type="Script" id=2]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+tab_align = 0
+all_tabs_in_front = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TypesSectionLabel" type="Label" parent="TabContainer/VBoxContainer"]
+margin_right = 1272.0
+margin_bottom = 14.0
+text = "Logix Nodes"
+
+[node name="NodesListButton" type="OptionButton" parent="TabContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 1272.0
+margin_bottom = 38.0
+
+[node name="SlotNameLabel" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 42.0
+margin_right = 1272.0
+margin_bottom = 56.0
+text = "Class name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 60.0
+margin_right = 1272.0
+margin_bottom = 74.0
+text = "(From FrooxEngine.LogiX.)"
+
+[node name="ClassNameInput" type="LineEdit" parent="TabContainer/VBoxContainer"]
+margin_top = 78.0
+margin_right = 1272.0
+margin_bottom = 102.0
+
+[node name="SlotsLabel" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 106.0
+margin_right = 1272.0
+margin_bottom = 120.0
+text = "Slots"
+
+[node name="SlotsList" type="ItemList" parent="TabContainer/VBoxContainer"]
+margin_top = 124.0
+margin_right = 1272.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 0, 80 )
+
+[node name="Button" type="Button" parent="TabContainer/VBoxContainer"]
+margin_top = 208.0
+margin_right = 1272.0
+margin_bottom = 228.0
+text = "Add slot"
+
+[node name="SlotEditorLabel" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 232.0
+margin_right = 1272.0
+margin_bottom = 246.0
+text = "Edit Slot"
+
+[node name="Label4" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 250.0
+margin_right = 1272.0
+margin_bottom = 264.0
+text = "Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SlotNameInput" type="LineEdit" parent="TabContainer/VBoxContainer"]
+margin_top = 268.0
+margin_right = 1272.0
+margin_bottom = 292.0
+
+[node name="Label3" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 296.0
+margin_right = 1272.0
+margin_bottom = 310.0
+text = "Direction"
+
+[node name="DirectionOptions" type="OptionButton" parent="TabContainer/VBoxContainer"]
+margin_top = 314.0
+margin_right = 1272.0
+margin_bottom = 334.0
+text = "INPUT"
+items = [ "INPUT", null, false, 1, null, "OUTPUT", null, false, 2, null ]
+selected = 0
+
+[node name="Label" type="Label" parent="TabContainer/VBoxContainer"]
+margin_top = 338.0
+margin_right = 1272.0
+margin_bottom = 352.0
+text = "Type"
+
+[node name="SlotTypeOptions" type="OptionButton" parent="TabContainer/VBoxContainer"]
+margin_top = 356.0
+margin_right = 1272.0
+margin_bottom = 376.0
+
+[node name="Maincontainer" type="VBoxContainer" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Program" type="GraphEdit" parent="TabContainer/Maincontainer"]
+margin_right = 1272.0
+margin_bottom = 684.0
+size_flags_vertical = 3
+right_disconnects = true
+scroll_offset = Vector2( 0, -24 )
+
+[node name="Metadata" type="HBoxContainer" parent="TabContainer/Maincontainer/Program"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -41.0
+margin_right = -16.0
+margin_bottom = 40.0
+grow_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NameLabel" type="Label" parent="TabContainer/Maincontainer/Program/Metadata"]
+margin_top = 13.0
+margin_right = 101.0
+margin_bottom = 27.0
+text = "Program name :"
+
+[node name="NameInput" type="LineEdit" parent="TabContainer/Maincontainer/Program/Metadata"]
+margin_left = 105.0
+margin_right = 225.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 120, 0 )
+
+[node name="SaveButton" type="Button" parent="TabContainer/Maincontainer/Program/Metadata"]
+margin_left = 229.0
+margin_right = 270.0
+margin_bottom = 40.0
+grow_horizontal = 0
+text = "Save"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
+[connection signal="item_selected" from="TabContainer/VBoxContainer/NodesListButton" to="." method="_on_NodesListButton_item_selected"]
+[connection signal="text_entered" from="TabContainer/VBoxContainer/ClassNameInput" to="." method="_on_ClassNameInput_text_entered"]
+[connection signal="connection_from_empty" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_connection_from_empty"]
+[connection signal="connection_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_connection_request"]
+[connection signal="connection_to_empty" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_connection_to_empty"]
+[connection signal="copy_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_copy_nodes_request"]
+[connection signal="delete_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_Program_delete_nodes_request"]
+[connection signal="disconnection_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_disconnection_request"]
+[connection signal="duplicate_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_duplicate_nodes_request"]
+[connection signal="paste_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_paste_nodes_request"]
+[connection signal="popup_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_popup_request"]
+[connection signal="pressed" from="TabContainer/Maincontainer/Program/Metadata/SaveButton" to="." method="_on_SaveButton_pressed"]
