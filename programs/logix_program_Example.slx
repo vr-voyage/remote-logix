@@ -1,0 +1,122 @@
+PROGRAM 'Backup2'
+NODE 2 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
+NODE 6 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
+NODE 7 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
+NODE 8 'FrooxEngine.LogiX.Data.ReadDynamicVariable<System-String>' 'ReadDynamicVariable<System-String>'
+NODE 9 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
+NODE 10 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
+NODE 11 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
+NODE 15 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
+NODE 16 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
+NODE 17 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
+NODE 19 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
+NODE 20 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
+NODE 21 'FrooxEngine.LogiX.Operators.AND_Bool' 'AND_Bool'
+NODE 23 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
+NODE 4 'FrooxEngine.LogiX.ProgramFlow.ForNode' 'ForNode'
+NODE 3 'FrooxEngine.LogiX.WorldModel.ChildrenCount' 'ChildrenCount'
+NODE 5 'FrooxEngine.LogiX.WorldModel.GetChild' 'GetChild'
+NODE 14 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
+NODE 13 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
+NODE 18 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
+NODE 22 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
+NODE 12 'FrooxEngine.LogiX.WorldModel.GetSlotName' 'GetSlotName'
+NODE 29 'FrooxEngine.LogiX.WorldModel.GetSlotName' 'GetSlotName'
+NODE 30 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
+NODE 32 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
+NODE 33 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
+NODE 34 'FrooxEngine.LogiX.Data.ReadDynamicVariable<System-Single>' 'ReadDynamicVariable<System-Single>'
+NODE 36 'FrooxEngine.LogiX.Data.WriteDynamicVariable<System-Single>' 'WriteDynamicVariable<System-Single>'
+NODE 37 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
+NODE 31 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
+NODE 25 'FrooxEngine.LogiX.WorldModel.ChildrenCount' 'ChildrenCount'
+NODE 28 'FrooxEngine.LogiX.WorldModel.GetChild' 'GetChild'
+NODE 38 'FrooxEngine.LogiX.Input.BoolInput' 'BoolInput'
+NODE 26 'FrooxEngine.LogiX.ProgramFlow.ForNode' 'ForNode'
+SETCONST 2 'AvatarRoot'
+SETCONST 11 'CurrentEmote'
+SETCONST 17 'Blendshapes'
+SETCONST 37 'value'
+SETCONST 38 'false'
+POS 2 380 100
+POS 6 -240 300
+POS 7 -60 360
+POS 8 -660 300
+POS 9 -320 440
+POS 10 180 440
+POS 11 -880 320
+POS 15 1500 200
+POS 16 1500 380
+POS 17 1280 280
+POS 19 1720 240
+POS 20 1720 400
+POS 21 2000 300
+POS 23 2200 200
+POS 4 380 320
+POS 3 200 320
+POS 5 540 400
+POS 14 660 140
+POS 13 880 140
+POS 18 1040 200
+POS 22 1300 140
+POS 12 680 420
+POS 29 300 1200
+POS 30 620 1000
+POS 32 880 1160
+POS 33 1420 1180
+POS 34 1040 1200
+POS 36 1620 960
+POS 37 800 860
+POS 31 380 920
+POS 25 -260 1160
+POS 28 140 1160
+POS 38 360 580
+POS 26 -100 1140
+INPUT 14 'Name' 2 '*'
+INPUT 4 'Count' 3 '*'
+INPUT 5 'ChildIndex' 4 'Iteration'
+INPUT 7 'Instance' 6 'FoundChild'
+INPUT 6 'Name' 8 'Value'
+INPUT 9 'Condition' 8 'FoundValue'
+IMPULSE 10 'Run' 9 'True'
+INPUT 10 'Condition' 7 '*'
+INPUT 3 'Instance' 6 'FoundChild'
+IMPULSE 4 'Run' 10 'True'
+INPUT 8 'VariableName' 11 '*'
+INPUT 13 'Instance' 14 'FoundChild'
+INPUT 12 'Instance' 5 '*'
+INPUT 13 'Name' 12 '*'
+INPUT 22 'Condition' 18 '*'
+INPUT 18 'Instance' 13 'FoundChild'
+INPUT 15 'Name' 17 '*'
+INPUT 16 'Name' 17 '*'
+INPUT 16 'Instance' 5 '*'
+INPUT 19 'Instance' 15 'FoundChild'
+INPUT 20 'Instance' 16 'FoundChild'
+INPUT 21 'B' 20 '*'
+INPUT 21 'A' 19 '*'
+INPUT 23 'Condition' 21 '*'
+IMPULSE 23 'Run' 22 'True'
+IMPULSE 22 'Run' 4 'LoopIteration'
+INPUT 26 'Count' 25 '*'
+INPUT 28 'ChildIndex' 26 'Iteration'
+INPUT 29 'Instance' 28 '*'
+INPUT 31 'Name' 29 '*'
+INPUT 30 'Instance' 31 'FoundChild'
+INPUT 32 'Condition' 30 '*'
+IMPULSE 32 'Run' 26 'LoopIteration'
+INPUT 36 'Value' 34 'Value'
+INPUT 34 'VariableName' 37 '*'
+IMPULSE 33 'Run' 32 'True'
+INPUT 33 'Condition' 34 'FoundValue'
+IMPULSE 36 'Write' 33 'True'
+INPUT 36 'VariableName' 37 '*'
+INPUT 31 'Instance' 15 'FoundChild'
+INPUT 25 'Instance' 16 'FoundChild'
+INPUT 28 'Instance' 16 'FoundChild'
+INPUT 31 'MatchSubstring' 38 '*'
+INPUT 14 'MatchSubstring' 38 '*'
+INPUT 13 'MatchSubstring' 38 '*'
+INPUT 16 'MatchSubstring' 38 '*'
+INPUT 15 'MatchSubstring' 38 '*'
+IMPULSE 26 'Run' 23 'True'

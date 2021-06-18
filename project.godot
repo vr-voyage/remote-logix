@@ -14,6 +14,10 @@ config/name="Neos Import Export"
 run/main_scene="res://TestingGraph.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+IDGenerator="*res://id_generator.gd"
+
 [display]
 
 window/size/width=1280

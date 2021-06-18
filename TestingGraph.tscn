@@ -13,6 +13,10 @@ path_editor_slots_types = NodePath("TabContainer/ScrollContainer/VBoxContainer/N
 path_editor_node_slot_name = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput")
 path_editor_nodes_list_option = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/NodesListButton")
 path_editor_node_class_name_input = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ClassNameInput")
+path_editor_node_inputs_fields_editor = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor")
+path_editor_node_is_input_checkbox = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/CheckBox")
+path_editor_node_input_grid_columns_spinbox = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/ColumnsInput")
+path_editor_node_input_grid_rows_spinbox = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput")
 path_editor_inputs_slots_list = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List")
 path_editor_outputs_slots_list = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List")
 path_save_button = NodePath("TabContainer/Maincontainer/Program/Metadata/SaveButton")
@@ -184,6 +188,43 @@ __meta__ = {
 margin_top = 108.0
 margin_right = 1260.0
 margin_bottom = 132.0
+
+[node name="ConstantInputEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+visible = false
+margin_top = 136.0
+margin_right = 1260.0
+margin_bottom = 206.0
+
+[node name="CheckBox" type="CheckBox" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor"]
+margin_right = 1260.0
+margin_bottom = 24.0
+text = "Constant input fields (Requires 0 Inputs 1 Output)"
+
+[node name="Label" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor"]
+margin_top = 28.0
+margin_right = 1260.0
+margin_bottom = 42.0
+text = "Columns x Rows"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor"]
+margin_top = 46.0
+margin_right = 1260.0
+margin_bottom = 70.0
+
+[node name="ColumnsInput" type="SpinBox" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer"]
+margin_right = 74.0
+margin_bottom = 24.0
+min_value = 1.0
+max_value = 4.0
+value = 1.0
+
+[node name="RowsInput" type="SpinBox" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer"]
+margin_left = 78.0
+margin_right = 152.0
+margin_bottom = 24.0
+min_value = 1.0
+max_value = 4.0
+value = 1.0
 
 [node name="SlotsEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
 margin_top = 136.0
@@ -394,15 +435,21 @@ rect_min_size = Vector2( 10, 0 )
 [connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/HBoxContainer2/SaveButton" to="." method="_on_NodesDefinitions_SaveButton_pressed"]
 [connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/Actions/CreateNodeButon" to="." method="_on_CreateNode_Button_pressed"]
 [connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/NodesListButton" to="." method="_on_NodesListButton_item_selected"]
+[connection signal="focus_exited" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ClassNameInput" to="." method="_on_ClassNameInput_focus_exited"]
 [connection signal="text_entered" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ClassNameInput" to="." method="_on_ClassNameInput_text_entered"]
+[connection signal="toggled" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="value_changed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/ColumnsInput" to="." method="_on_ColumnsInput_value_changed"]
+[connection signal="value_changed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput" to="." method="_on_RowsInput_value_changed"]
 [connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List" to="." method="_on_Inputs_List_item_selected"]
 [connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/AddButton" to="." method="_on_Inputs_AddButton_pressed"]
 [connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List" to="." method="_on_Outputs_List_item_selected"]
 [connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/AddButton" to="." method="_on_Outputs_AddButton_pressed"]
+[connection signal="focus_entered" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_focus_entered"]
+[connection signal="text_changed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_changed"]
 [connection signal="text_entered" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_entered"]
 [connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions" to="." method="_on_SlotTypeOptions_item_selected"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_DeleteSlotButton_pressed"]
+[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
 [connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/List" to="." method="_on_List_item_selected"]
 [connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/AddButton" to="." method="_on_TypesEditor_AddButton_pressed"]
 [connection signal="text_entered" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NameInput" to="." method="_on_TypeNameInput_text_entered"]
