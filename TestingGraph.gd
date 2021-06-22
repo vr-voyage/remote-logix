@@ -1,6 +1,8 @@
 extends Control
 
-onready var graph:GraphEdit = $"TabContainer/Maincontainer/Program"
+export(NodePath) var path_graph
+onready var graph:GraphEdit = get_node(path_graph)
+#onready var graph:GraphEdit = $"TabContainer/Maincontainer/Program"
 
 export(NodePath) var path_editor_slots_types
 onready var ui_slot_types_option:OptionButton = get_node(path_editor_slots_types)
@@ -230,15 +232,25 @@ class LXNode extends GraphNode:
 
 	enum DIRECTION { INVALID, INPUT, OUTPUT, COUNT }
 
+	# FIXME ??? Remove this when possible
 	func get_short_title() -> String:
-		return logix_class_name.get_extension()
+		return self.title
 
 	func get_full_title() -> String:
 		return get_short_title() + " (" + self.logix_class_name + ")"
 
+	func _title_name() -> String:
+		var bracket_pos:int = logix_class_name.find('<')
+		if bracket_pos < 0:
+			return logix_class_name.get_extension()
+		else:
+			var specialization_part:String = logix_class_name.substr(bracket_pos)
+			var generic_part:String = logix_class_name.substr(0, bracket_pos)
+			return generic_part.get_extension() + specialization_part
+
 	func set_class_name(new_logix_class_name:String):
 		logix_class_name = new_logix_class_name
-		self.title = new_logix_class_name.get_extension()
+		self.title = _title_name()
 
 	func _valid_dir_value(dir_value:int) -> bool:
 		return DIRECTION.INVALID < dir_value and dir_value < DIRECTION.COUNT
@@ -790,6 +802,12 @@ func _script_quote_string(unquoted_string:String) -> String:
 func _script_unquote_string(quoted_string:String) -> String:
 	return quoted_string.replace("''", "'").trim_prefix("'").trim_suffix("'")
 
+func _script_user_input_to_base64(unquoted_data:String) -> String:
+	return '"' + Marshalls.utf8_to_base64(unquoted_data) + '"'
+
+func _script_base64_to_user_input(quoted_data:String) -> String:
+	return Marshalls.base64_to_utf8(quoted_data.trim_prefix('"').trim_suffix('"'))
+
 func _generate_instruction_from(instructions_data:PoolStringArray) -> String:
 	return instructions_data.join(script_fields_separator)
 
@@ -798,7 +816,9 @@ func _script_define_node(logix_node:LXNode) -> String:
 		"NODE",
 		str(logix_node.get_node_id()),
 		_script_quote_string(logix_node.logix_class_name),
-		_script_quote_string(logix_node.title)
+		# At the moments, title are automatically set up
+		# But that might change
+		_script_user_input_to_base64(logix_node.title)
 	])
 	return _generate_instruction_from(instruction_data)
 
@@ -886,21 +906,26 @@ func _script_define_connections(node_graph:GraphEdit) -> PoolStringArray:
 			local_array.append(result[1])
 	return local_array
 
-func _script_define_program_name(
-	program_name:String) -> String:
+# File versions allow interpreters to understand how
+# they should parse your file, once the format evolves
+const PROGRAM_SCRIPT_VERSION:int = 1
+
+func _script_define_program_name(program_name:String) -> String:
+
 	var instruction_data:PoolStringArray = PoolStringArray([
 		"PROGRAM",
-		_script_quote_string(program_name)])
+		_script_user_input_to_base64(program_name),
+		str(PROGRAM_SCRIPT_VERSION)])
 	return _generate_instruction_from(instruction_data)
 
 # FIXME This is bound to miserably
-const script_values_separator = "\t"
+export(String) var script_values_separator = ' '
 func _script_define_const_node_value(logix_const_node:LXConstValue) -> String:
 
 	var quoted_values:PoolStringArray = PoolStringArray()
 
 	for value in logix_const_node.get_values():
-		quoted_values.append(_script_quote_string(value))
+		quoted_values.append(_script_user_input_to_base64(value))
 
 	var instruction_data:PoolStringArray = PoolStringArray([
 		"SETCONST",
@@ -927,7 +952,7 @@ func serialize_current_program(program_name:String) -> String:
 	listing.append_array(_script_define_const_nodes_values(graph))
 	listing.append_array(_script_define_nodes_positions(graph))
 	listing.append_array(_script_define_connections(graph))
-	return listing.join("\n")
+	return listing.join("\n") + "\n"
 
 class ScriptLoaderState:
 	var nodes_refs:Dictionary = {}
@@ -946,7 +971,7 @@ func _report_bogus_line(
 
 func _parse_program_line(script_line:String, state:Dictionary):
 	var args:PoolStringArray = script_line.split(script_fields_separator)
-	ui_program_name_text.text = _script_unquote_string(args[1])
+	ui_program_name_text.text = _script_base64_to_user_input(args[1])
 	return
 
 func _parse_node_line(script_line:String, state:Dictionary):
@@ -972,7 +997,7 @@ func _parse_node_line(script_line:String, state:Dictionary):
 	# FIXME This is actually dangerous, check for duplicate id
 	# first !
 	added_node.node_id = node_id
-	added_node.title   = node_title
+	added_node.title   = _script_base64_to_user_input(node_title)
 
 	# FIXME Get rid of that global variable
 	graph.add_child(added_node)
@@ -1051,17 +1076,16 @@ func _parse_pos_line(script_line:String, state:Dictionary):
 	node.offset = Vector2(node_pos_x, node_pos_y)
 
 func _parse_setconst_line(script_line:String, state:Dictionary):
-	# We need to a bit smarter here, else we'll fail miserably
-	# Get to the next part
-
-	var node_id_start = script_line.find(script_fields_separator) + 1
-	var node_id_end = script_line.find(script_fields_separator, node_id_start)
-
-	if node_id_end <= node_id_start:
-		printerr("Bogus SETCONST instruction : " + script_line)
+	# FIXME This is the 'C' definition of args, which can easily
+	# surprise other programmers. Try to find another name. 
+	var args:PoolStringArray = script_line.split(script_fields_separator)
+	var min_expected_args:int = 3
+	var n_args:int = len(args)
+	if n_args < min_expected_args:
+		_report_bogus_line("SETCONST", min_expected_args, n_args, script_line)
 		return
 
-	var node_id_str:String = script_line.substr(node_id_start, node_id_end - node_id_start)
+	var node_id_str:String = args[1]
 	printerr("Node ID : " + node_id_str)
 	var node_id:int = node_id_str.to_int()
 	if not state["nodes"].has(node_id):
@@ -1069,50 +1093,10 @@ func _parse_setconst_line(script_line:String, state:Dictionary):
 		return
 
 	var node:LXConstValue = state["nodes"][node_id]
-
 	var values:PoolStringArray = PoolStringArray()
-	var string_max_idx:int = len(script_line) - 1
-	var field_end:int = node_id_end
-	while true:
-		var field_start:int = script_line.find("'", field_end)
-		if field_start < 0:
-			break
-		field_end = field_start
-		while true:
-			field_end = script_line.find("'", field_end+1)
-			if field_end < 0:
-				# FIXME This has to be fixed.
-				# The only way to fix this is to pass the whole script,
-				# instead of a single line, starting from this SETCONST
-				# field.
-				printerr("Unexpected end of line ??")
-				break
-			# Continue if it's a quoted quote character
-			# FIXME
-			# This could just be avoided by using some UTF-8 special character
-			# and denying the input of such character.
-			# It's not like people commonly input UTF-8 control chars.
-			# If they do this, well, too bad !
-			if field_end < string_max_idx and script_line[field_end+1] == "'":
-				field_end += 1
-				continue
-			break
 
-		if field_end < 0:
-			break
-
-		var unquoted_string:String = _script_unquote_string(
-			script_line.substr(field_start, field_end - field_start))
-		values.append(unquoted_string)
-
-		if field_end == string_max_idx:
-			break
-
-	var field_start:int = script_line.find("'")
-
-	if len(values) == 0:
-		printerr("No values provided with SETCONST !")
-		return
+	for i in range(2, n_args):
+		values.append(_script_base64_to_user_input(args[i]))
 
 	node.set_values(values)
 
@@ -1123,9 +1107,6 @@ func load_script(program_script:String):
 		if child is LXNode:
 			graph.remove_child(child)
 
-	# FIXME Doing it the stupid way, to release the whole thing ASAP
-	# This will fail miserably when trying to parse string definitions
-	# containing carriage returns
 	var lines:PoolStringArray = program_script.split('\n')
 	for line in lines:
 		match line.split(script_fields_separator)[0]:
@@ -1179,8 +1160,11 @@ func load_program(program_filename:String) -> bool:
 
 	return true
 
+func _get_program_name() -> String:
+	return ui_program_name_text.text
+
 func _on_SaveButton_pressed():
-	var program_name:String = ui_program_name_text.text
+	var program_name:String = _get_program_name()
 	# FIXME Sanitize filenames
 	# Check if the sanitized filenames still have characters in it
 	if program_name.strip_edges().empty():
@@ -1262,7 +1246,6 @@ func edit_node(useable_node_idx:int):
 	# However, checkboxes "toggled" signals are TRIGGERED when setting
 	# pressed manually !?
 	# WTF GODOT !
-	# Fuck THIS SHIT !
 	ui_edited_node_is_input_checkbox.disconnect("toggled", self, "_on_CheckBox_toggled")
 	ui_edited_node_is_input_checkbox.pressed = model_node is LXConstValue
 	ui_edited_node_is_input_checkbox.connect("toggled", self, "_on_CheckBox_toggled")
@@ -1283,15 +1266,29 @@ func _on_NodesListButton_item_selected(index):
 	var actual_idx:int = ui_nodes_list_option.get_item_id(index)
 	edit_node(actual_idx)
 
-func _on_ClassNameInput_text_entered(new_text):
+
+func _graph_change_node_classname(old_name:String, new_name:String):
+	for child in graph.get_children():
+		if not child is LXNode:
+			continue
+		var logix_node:LXNode = child as LXNode
+		if logix_node.logix_class_name == old_name:
+			logix_node.set_class_name(new_name)
+
+func _selected_node_model_change_name(new_name:String):
 	if selected_node_model == invalid_node:
 		return
-	selected_node_model.set_class_name(new_text)
+	_graph_change_node_classname(
+		selected_node_model.logix_class_name,
+		new_name)
+	selected_node_model.set_class_name(new_name)
 	_ui_refresh_nodes_list_keep_selection()
 	prepare_popup_menu()
+	pass
+
+func _on_ClassNameInput_text_entered(new_text):
+	_selected_node_model_change_name(new_text)
 	pass # Replace with function body.
-
-
 
 func _ui_refresh_nodes_look():
 	selected_node_model.refresh_slots_style()
@@ -1465,7 +1462,6 @@ func _on_PopupMenu_focus_exited():
 	ui_popup_menu.hide()
 	pass # Replace with function body.
 
-
 func _on_CheckBox_toggled(button_pressed:bool):
 	printerr("Called CheckBox toggled")
 	if selected_node_model != invalid_node:
@@ -1497,16 +1493,17 @@ func _on_SlotNameInput_text_changed(new_text):
 	pass # Replace with function body.
 
 func _on_ClassNameInput_focus_exited():
-	if selected_node_model == invalid_node:
-		return
-	selected_node_model.set_class_name(ui_edited_node_class_name_input.text)
-	_ui_refresh_nodes_list_keep_selection()
+	_selected_node_model_change_name(ui_edited_node_class_name_input.text)
 	pass # Replace with function body.
-
 
 func _on_SlotNameInput_focus_entered():
 	if edited_slot == invalid_node:
 		printerr("[BUG] Trying to edit a null slot !")
 	edited_slot.title = ui_edited_node_slot_name.text
 	_ui_refresh_edited_node_refresh_slots()
+	pass # Replace with function body.
+
+
+func _on_SendButton_pressed():
+	$TabContainer/Websocket.send_string(serialize_current_program(_get_program_name()))
 	pass # Replace with function body.

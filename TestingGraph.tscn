@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
+[ext_resource path="res://Websocket.tscn" type="PackedScene" id=1]
 [ext_resource path="res://TestingGraph.gd" type="Script" id=2]
 
 [node name="Control" type="Control"]
@@ -9,22 +10,23 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-path_editor_slots_types = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions")
-path_editor_node_slot_name = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput")
-path_editor_nodes_list_option = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/NodesListButton")
-path_editor_node_class_name_input = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ClassNameInput")
-path_editor_node_inputs_fields_editor = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor")
-path_editor_node_is_input_checkbox = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/CheckBox")
-path_editor_node_input_grid_columns_spinbox = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/ColumnsInput")
-path_editor_node_input_grid_rows_spinbox = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput")
-path_editor_inputs_slots_list = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List")
-path_editor_outputs_slots_list = NodePath("TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List")
-path_save_button = NodePath("TabContainer/Maincontainer/Program/Metadata/SaveButton")
+path_graph = NodePath("TabContainer/Logix/Program")
+path_editor_slots_types = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions")
+path_editor_node_slot_name = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput")
+path_editor_nodes_list_option = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/NodesListButton")
+path_editor_node_class_name_input = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ClassNameInput")
+path_editor_node_inputs_fields_editor = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor")
+path_editor_node_is_input_checkbox = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/CheckBox")
+path_editor_node_input_grid_columns_spinbox = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/ColumnsInput")
+path_editor_node_input_grid_rows_spinbox = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput")
+path_editor_inputs_slots_list = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List")
+path_editor_outputs_slots_list = NodePath("TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List")
+path_save_button = NodePath("TabContainer/Logix/Program/Metadata/SaveButton")
 path_popup_menu = NodePath("PopupMenu")
-path_program_name_input = NodePath("TabContainer/Maincontainer/Program/Metadata/NameInput")
-path_editor_types_list = NodePath("TabContainer/ScrollContainer/VBoxContainer/TypesEditor/List")
-path_edited_type_name = NodePath("TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NameInput")
-path_edited_type_color = NodePath("TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins/ColorPicker")
+path_program_name_input = NodePath("TabContainer/Logix/Program/Metadata/NameInput")
+path_editor_types_list = NodePath("TabContainer/Nodes_editor/VBoxContainer/TypesEditor/List")
+path_edited_type_name = NodePath("TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NameInput")
+path_edited_type_color = NodePath("TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NeedMargins/ColorPicker")
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 margin_right = 20.0
@@ -39,7 +41,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Maincontainer" type="VBoxContainer" parent="TabContainer"]
+[node name="Logix" type="VBoxContainer" parent="TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -52,14 +54,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Program" type="GraphEdit" parent="TabContainer/Maincontainer"]
+[node name="Program" type="GraphEdit" parent="TabContainer/Logix"]
 margin_right = 1272.0
 margin_bottom = 684.0
 size_flags_vertical = 3
 right_disconnects = true
 scroll_offset = Vector2( 0, -24 )
 
-[node name="Metadata" type="HBoxContainer" parent="TabContainer/Maincontainer/Program"]
+[node name="Metadata" type="HBoxContainer" parent="TabContainer/Logix/Program"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -41.0
@@ -70,19 +72,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NameLabel" type="Label" parent="TabContainer/Maincontainer/Program/Metadata"]
+[node name="NameLabel" type="Label" parent="TabContainer/Logix/Program/Metadata"]
 margin_top = 13.0
 margin_right = 101.0
 margin_bottom = 27.0
 text = "Program name :"
 
-[node name="NameInput" type="LineEdit" parent="TabContainer/Maincontainer/Program/Metadata"]
+[node name="NameInput" type="LineEdit" parent="TabContainer/Logix/Program/Metadata"]
 margin_left = 105.0
 margin_right = 225.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 120, 0 )
 
-[node name="SaveButton" type="Button" parent="TabContainer/Maincontainer/Program/Metadata"]
+[node name="SaveButton" type="Button" parent="TabContainer/Logix/Program/Metadata"]
 margin_left = 229.0
 margin_right = 270.0
 margin_bottom = 40.0
@@ -92,13 +94,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="TabContainer/Maincontainer/Program/Metadata"]
+[node name="Button" type="Button" parent="TabContainer/Logix/Program/Metadata"]
 margin_left = 274.0
 margin_right = 316.0
 margin_bottom = 40.0
 text = "Load"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer"]
+[node name="SendButton" type="Button" parent="TabContainer/Logix/Program/Metadata"]
+margin_left = 320.0
+margin_right = 363.0
+margin_bottom = 40.0
+text = "Send"
+
+[node name="Nodes_editor" type="ScrollContainer" parent="TabContainer"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -107,7 +115,7 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Nodes_editor"]
 margin_right = 1272.0
 margin_bottom = 1218.0
 size_flags_horizontal = 3
@@ -116,66 +124,66 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer"]
 margin_right = 1260.0
 margin_bottom = 20.0
 
-[node name="SaveButton" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/HBoxContainer2"]
+[node name="SaveButton" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/HBoxContainer2"]
 margin_right = 64.0
 margin_bottom = 20.0
 text = "SaveList"
 
-[node name="HSeparator2" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator2" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer"]
 margin_top = 24.0
 margin_right = 1260.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 0, 40 )
 
-[node name="NodeEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer"]
+[node name="NodeEditor" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer"]
 margin_top = 68.0
 margin_right = 1260.0
 margin_bottom = 518.0
 
-[node name="Actions" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="Actions" type="HBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_right = 1260.0
 margin_bottom = 20.0
 
-[node name="CreateNodeButon" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/Actions"]
+[node name="CreateNodeButon" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/Actions"]
 margin_right = 89.0
 margin_bottom = 20.0
 text = "Create node"
 
-[node name="Control" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/Actions"]
+[node name="Control" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/Actions"]
 margin_left = 93.0
 margin_right = 1260.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
-[node name="DeleteNodeButton" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/Actions"]
+[node name="DeleteNodeButton" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/Actions"]
 visible = false
 margin_left = 1181.0
 margin_right = 1272.0
 margin_bottom = 20.0
 text = "Delete node"
 
-[node name="HSeparator3" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="HSeparator3" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_top = 24.0
 margin_right = 1260.0
 margin_bottom = 44.0
 rect_min_size = Vector2( 0, 20 )
 
-[node name="TypesSectionLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="TypesSectionLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_top = 48.0
 margin_right = 1260.0
 margin_bottom = 62.0
 text = "Logix Nodes"
 
-[node name="NodesListButton" type="OptionButton" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="NodesListButton" type="OptionButton" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_top = 66.0
 margin_right = 1260.0
 margin_bottom = 86.0
 
-[node name="NodeClassNameLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="NodeClassNameLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_top = 90.0
 margin_right = 1260.0
 margin_bottom = 104.0
@@ -184,41 +192,41 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ClassNameInput" type="LineEdit" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="ClassNameInput" type="LineEdit" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_top = 108.0
 margin_right = 1260.0
 margin_bottom = 132.0
 
-[node name="ConstantInputEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="ConstantInputEditor" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 visible = false
 margin_top = 136.0
 margin_right = 1260.0
 margin_bottom = 206.0
 
-[node name="CheckBox" type="CheckBox" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor"]
+[node name="CheckBox" type="CheckBox" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor"]
 margin_right = 1260.0
 margin_bottom = 24.0
 text = "Constant input fields (Requires 0 Inputs 1 Output)"
 
-[node name="Label" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor"]
+[node name="Label" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor"]
 margin_top = 28.0
 margin_right = 1260.0
 margin_bottom = 42.0
 text = "Columns x Rows"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor"]
 margin_top = 46.0
 margin_right = 1260.0
 margin_bottom = 70.0
 
-[node name="ColumnsInput" type="SpinBox" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer"]
+[node name="ColumnsInput" type="SpinBox" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer"]
 margin_right = 74.0
 margin_bottom = 24.0
 min_value = 1.0
 max_value = 4.0
 value = 1.0
 
-[node name="RowsInput" type="SpinBox" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer"]
+[node name="RowsInput" type="SpinBox" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer"]
 margin_left = 78.0
 margin_right = 152.0
 margin_bottom = 24.0
@@ -226,28 +234,28 @@ min_value = 1.0
 max_value = 4.0
 value = 1.0
 
-[node name="SlotsEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor"]
+[node name="SlotsEditor" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor"]
 margin_top = 136.0
 margin_right = 1260.0
 margin_bottom = 450.0
 
-[node name="SectionLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor"]
+[node name="SectionLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor"]
 margin_right = 1260.0
 margin_bottom = 14.0
 text = "Slots"
 
-[node name="AvailableSlots" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor"]
+[node name="AvailableSlots" type="HBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor"]
 margin_top = 18.0
 margin_right = 1260.0
 margin_bottom = 140.0
 size_flags_horizontal = 3
 
-[node name="Inputs" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots"]
+[node name="Inputs" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots"]
 margin_right = 628.0
 margin_bottom = 122.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs"]
+[node name="Label" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs"]
 margin_right = 628.0
 margin_bottom = 14.0
 text = "Inputs"
@@ -255,25 +263,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="List" type="ItemList" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs"]
+[node name="List" type="ItemList" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs"]
 margin_top = 18.0
 margin_right = 628.0
 margin_bottom = 98.0
 rect_min_size = Vector2( 100, 80 )
 
-[node name="AddButton" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs"]
+[node name="AddButton" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs"]
 margin_top = 102.0
 margin_right = 628.0
 margin_bottom = 122.0
 text = "Add slot"
 
-[node name="Outputs" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots"]
+[node name="Outputs" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots"]
 margin_left = 632.0
 margin_right = 1260.0
 margin_bottom = 122.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs"]
+[node name="Label" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs"]
 margin_right = 628.0
 margin_bottom = 14.0
 text = "Outputs"
@@ -281,29 +289,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="List" type="ItemList" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs"]
+[node name="List" type="ItemList" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs"]
 margin_top = 18.0
 margin_right = 628.0
 margin_bottom = 98.0
 rect_min_size = Vector2( 100, 80 )
 
-[node name="AddButton" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs"]
+[node name="AddButton" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs"]
 margin_top = 102.0
 margin_right = 628.0
 margin_bottom = 122.0
 text = "Add slot"
 
-[node name="SelectedSlotEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor"]
+[node name="SelectedSlotEditor" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor"]
 margin_top = 144.0
 margin_right = 1260.0
 margin_bottom = 314.0
 
-[node name="SectionLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="SectionLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_right = 1260.0
 margin_bottom = 14.0
 text = "Edit Slot"
 
-[node name="NameLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="NameLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_top = 18.0
 margin_right = 1260.0
 margin_bottom = 32.0
@@ -312,87 +320,87 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlotNameInput" type="LineEdit" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="SlotNameInput" type="LineEdit" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_top = 36.0
 margin_right = 1260.0
 margin_bottom = 60.0
 
-[node name="TypeLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="TypeLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_top = 64.0
 margin_right = 1260.0
 margin_bottom = 78.0
 text = "Type"
 
-[node name="SlotTypeOptions" type="OptionButton" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="SlotTypeOptions" type="OptionButton" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_top = 82.0
 margin_right = 1260.0
 margin_bottom = 102.0
 
-[node name="Space" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="Space" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_top = 106.0
 margin_right = 1260.0
 margin_bottom = 146.0
 rect_min_size = Vector2( 0, 40 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor"]
 margin_top = 150.0
 margin_right = 1260.0
 margin_bottom = 170.0
 alignment = 2
 
-[node name="DeleteSlotButton" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer"]
+[node name="DeleteSlotButton" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer"]
 margin_left = 1132.0
 margin_right = 1260.0
 margin_bottom = 20.0
 text = "Delete edited slot"
 
-[node name="Space2" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer"]
+[node name="Space2" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer"]
 margin_top = 522.0
 margin_right = 1260.0
 margin_bottom = 562.0
 rect_min_size = Vector2( 0, 40 )
 
-[node name="TypesEditor" type="VBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer"]
+[node name="TypesEditor" type="VBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer"]
 margin_top = 566.0
 margin_right = 1260.0
 margin_bottom = 1218.0
 size_flags_horizontal = 3
 
-[node name="Types" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="Types" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_right = 1260.0
 margin_bottom = 14.0
 text = "Types"
 
-[node name="List" type="ItemList" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="List" type="ItemList" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_top = 18.0
 margin_right = 1260.0
 margin_bottom = 98.0
 rect_min_size = Vector2( 0, 80 )
 size_flags_horizontal = 3
 
-[node name="AddButton" type="Button" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="AddButton" type="Button" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_top = 102.0
 margin_right = 1260.0
 margin_bottom = 122.0
 
-[node name="NameLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="NameLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_top = 126.0
 margin_right = 1260.0
 margin_bottom = 140.0
 text = "Name"
 
-[node name="NameInput" type="LineEdit" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="NameInput" type="LineEdit" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_top = 144.0
 margin_right = 1260.0
 margin_bottom = 168.0
 
-[node name="ColorLabel" type="Label" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="ColorLabel" type="Label" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_top = 172.0
 margin_right = 1260.0
 margin_bottom = 186.0
 text = "Color"
 
-[node name="NeedMargins" type="HBoxContainer" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor"]
+[node name="NeedMargins" type="HBoxContainer" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor"]
 margin_top = 190.0
 margin_right = 1260.0
 margin_bottom = 652.0
@@ -401,56 +409,68 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MarginLeft" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
+[node name="MarginLeft" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NeedMargins"]
 margin_right = 10.0
 margin_bottom = 462.0
 rect_min_size = Vector2( 10, 0 )
 
-[node name="ColorPicker" type="ColorPicker" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
-margin_left = 22.0
-margin_top = 8.0
-margin_right = 1254.0
-margin_bottom = 470.0
+[node name="ColorPicker" type="ColorPicker" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NeedMargins"]
+margin_left = 74.0
+margin_top = 60.0
+margin_right = 1306.0
+margin_bottom = 522.0
 size_flags_horizontal = 3
 
-[node name="MarginRight" type="Control" parent="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
+[node name="MarginRight" type="Control" parent="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NeedMargins"]
 margin_left = 1250.0
 margin_right = 1260.0
 margin_bottom = 462.0
 rect_min_size = Vector2( 10, 0 )
 
+[node name="Websocket" parent="TabContainer" instance=ExtResource( 1 )]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+path_log_list = NodePath("ScrollContainer/Logs")
+path_clients_list = NodePath("ClientsList")
+
 [connection signal="focus_exited" from="PopupMenu" to="." method="_on_PopupMenu_focus_exited"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
-[connection signal="connection_from_empty" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_connection_from_empty"]
-[connection signal="connection_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_connection_request"]
-[connection signal="connection_to_empty" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_connection_to_empty"]
-[connection signal="copy_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_copy_nodes_request"]
-[connection signal="delete_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_Program_delete_nodes_request"]
-[connection signal="disconnection_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_disconnection_request"]
-[connection signal="duplicate_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_duplicate_nodes_request"]
-[connection signal="paste_nodes_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_paste_nodes_request"]
-[connection signal="popup_request" from="TabContainer/Maincontainer/Program" to="." method="_on_GraphEdit_popup_request"]
-[connection signal="pressed" from="TabContainer/Maincontainer/Program/Metadata/SaveButton" to="." method="_on_SaveButton_pressed"]
-[connection signal="pressed" from="TabContainer/Maincontainer/Program/Metadata/Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/HBoxContainer2/SaveButton" to="." method="_on_NodesDefinitions_SaveButton_pressed"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/Actions/CreateNodeButon" to="." method="_on_CreateNode_Button_pressed"]
-[connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/NodesListButton" to="." method="_on_NodesListButton_item_selected"]
-[connection signal="focus_exited" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ClassNameInput" to="." method="_on_ClassNameInput_focus_exited"]
-[connection signal="text_entered" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ClassNameInput" to="." method="_on_ClassNameInput_text_entered"]
-[connection signal="toggled" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/CheckBox" to="." method="_on_CheckBox_toggled"]
-[connection signal="value_changed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/ColumnsInput" to="." method="_on_ColumnsInput_value_changed"]
-[connection signal="value_changed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput" to="." method="_on_RowsInput_value_changed"]
-[connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List" to="." method="_on_Inputs_List_item_selected"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/AddButton" to="." method="_on_Inputs_AddButton_pressed"]
-[connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List" to="." method="_on_Outputs_List_item_selected"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/AddButton" to="." method="_on_Outputs_AddButton_pressed"]
-[connection signal="focus_entered" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_focus_entered"]
-[connection signal="text_changed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_changed"]
-[connection signal="text_entered" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_entered"]
-[connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions" to="." method="_on_SlotTypeOptions_item_selected"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_DeleteSlotButton_pressed"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
-[connection signal="item_selected" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/List" to="." method="_on_List_item_selected"]
-[connection signal="pressed" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/AddButton" to="." method="_on_TypesEditor_AddButton_pressed"]
-[connection signal="text_entered" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NameInput" to="." method="_on_TypeNameInput_text_entered"]
-[connection signal="color_changed" from="TabContainer/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins/ColorPicker" to="." method="_on_ColorPicker_color_changed"]
+[connection signal="connection_from_empty" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_connection_from_empty"]
+[connection signal="connection_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_connection_request"]
+[connection signal="connection_to_empty" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_connection_to_empty"]
+[connection signal="copy_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_copy_nodes_request"]
+[connection signal="delete_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_Program_delete_nodes_request"]
+[connection signal="disconnection_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_disconnection_request"]
+[connection signal="duplicate_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_duplicate_nodes_request"]
+[connection signal="paste_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_paste_nodes_request"]
+[connection signal="popup_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_popup_request"]
+[connection signal="pressed" from="TabContainer/Logix/Program/Metadata/SaveButton" to="." method="_on_SaveButton_pressed"]
+[connection signal="pressed" from="TabContainer/Logix/Program/Metadata/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="TabContainer/Logix/Program/Metadata/SendButton" to="." method="_on_SendButton_pressed"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/HBoxContainer2/SaveButton" to="." method="_on_NodesDefinitions_SaveButton_pressed"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/Actions/CreateNodeButon" to="." method="_on_CreateNode_Button_pressed"]
+[connection signal="item_selected" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/NodesListButton" to="." method="_on_NodesListButton_item_selected"]
+[connection signal="focus_exited" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ClassNameInput" to="." method="_on_ClassNameInput_focus_exited"]
+[connection signal="text_entered" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ClassNameInput" to="." method="_on_ClassNameInput_text_entered"]
+[connection signal="toggled" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="value_changed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/ColumnsInput" to="." method="_on_ColumnsInput_value_changed"]
+[connection signal="value_changed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput" to="." method="_on_RowsInput_value_changed"]
+[connection signal="item_selected" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List" to="." method="_on_Inputs_List_item_selected"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/AddButton" to="." method="_on_Inputs_AddButton_pressed"]
+[connection signal="item_selected" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List" to="." method="_on_Outputs_List_item_selected"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/AddButton" to="." method="_on_Outputs_AddButton_pressed"]
+[connection signal="focus_entered" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_focus_entered"]
+[connection signal="text_changed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_changed"]
+[connection signal="text_entered" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_entered"]
+[connection signal="item_selected" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions" to="." method="_on_SlotTypeOptions_item_selected"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_DeleteSlotButton_pressed"]
+[connection signal="item_selected" from="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/List" to="." method="_on_List_item_selected"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/AddButton" to="." method="_on_TypesEditor_AddButton_pressed"]
+[connection signal="text_entered" from="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NameInput" to="." method="_on_TypeNameInput_text_entered"]
+[connection signal="color_changed" from="TabContainer/Nodes_editor/VBoxContainer/TypesEditor/NeedMargins/ColorPicker" to="." method="_on_ColorPicker_color_changed"]
+
+[editable path="TabContainer/Websocket"]

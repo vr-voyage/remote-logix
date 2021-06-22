@@ -1,46 +1,45 @@
-PROGRAM 'Backup2'
-NODE 2 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
-NODE 6 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
-NODE 7 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
-NODE 8 'FrooxEngine.LogiX.Data.ReadDynamicVariable<System-String>' 'ReadDynamicVariable<System-String>'
-NODE 9 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
-NODE 10 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
-NODE 11 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
-NODE 15 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
-NODE 16 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
-NODE 17 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
-NODE 19 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
-NODE 20 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
-NODE 21 'FrooxEngine.LogiX.Operators.AND_Bool' 'AND_Bool'
-NODE 23 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
-NODE 4 'FrooxEngine.LogiX.ProgramFlow.ForNode' 'ForNode'
-NODE 3 'FrooxEngine.LogiX.WorldModel.ChildrenCount' 'ChildrenCount'
-NODE 5 'FrooxEngine.LogiX.WorldModel.GetChild' 'GetChild'
-NODE 14 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
-NODE 13 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
-NODE 18 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
-NODE 22 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
-NODE 12 'FrooxEngine.LogiX.WorldModel.GetSlotName' 'GetSlotName'
-NODE 29 'FrooxEngine.LogiX.WorldModel.GetSlotName' 'GetSlotName'
-NODE 30 'FrooxEngine.LogiX.Operators.NotNull<FrooxEngine-Slot>' 'NotNull<FrooxEngine-Slot>'
-NODE 32 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
-NODE 33 'FrooxEngine.LogiX.ProgramFlow.IfNode' 'IfNode'
-NODE 34 'FrooxEngine.LogiX.Data.ReadDynamicVariable<System-Single>' 'ReadDynamicVariable<System-Single>'
-NODE 36 'FrooxEngine.LogiX.Data.WriteDynamicVariable<System-Single>' 'WriteDynamicVariable<System-Single>'
-NODE 37 'FrooxEngine.LogiX.Input.StringInput' 'StringInput'
-NODE 31 'FrooxEngine.LogiX.WorldModel.FindChildByName' 'FindChildByName'
-NODE 25 'FrooxEngine.LogiX.WorldModel.ChildrenCount' 'ChildrenCount'
-NODE 28 'FrooxEngine.LogiX.WorldModel.GetChild' 'GetChild'
-NODE 38 'FrooxEngine.LogiX.Input.BoolInput' 'BoolInput'
-NODE 26 'FrooxEngine.LogiX.ProgramFlow.ForNode' 'ForNode'
-SETCONST 2 'AvatarRoot'
-SETCONST 11 'CurrentEmote'
-SETCONST 17 'Blendshapes'
-SETCONST 37 'value'
-SETCONST 38 'false'
+PROGRAM "RXhhbXBsZQ==" 1
+NODE 2 'FrooxEngine.LogiX.Input.StringInput' "U3RyaW5nSW5wdXQ="
+NODE 6 'FrooxEngine.LogiX.WorldModel.FindChildByName' "RmluZENoaWxkQnlOYW1l"
+NODE 8 'FrooxEngine.LogiX.Data.ReadDynamicVariable<System.String>' "UmVhZER5bmFtaWNWYXJpYWJsZTxTeXN0ZW0tU3RyaW5nPg=="
+NODE 9 'FrooxEngine.LogiX.ProgramFlow.IfNode' "SWZOb2Rl"
+NODE 10 'FrooxEngine.LogiX.ProgramFlow.IfNode' "SWZOb2Rl"
+NODE 11 'FrooxEngine.LogiX.Input.StringInput' "U3RyaW5nSW5wdXQ="
+NODE 15 'FrooxEngine.LogiX.WorldModel.FindChildByName' "RmluZENoaWxkQnlOYW1l"
+NODE 16 'FrooxEngine.LogiX.WorldModel.FindChildByName' "RmluZENoaWxkQnlOYW1l"
+NODE 17 'FrooxEngine.LogiX.Input.StringInput' "U3RyaW5nSW5wdXQ="
+NODE 19 'FrooxEngine.LogiX.Operators.NotNullNode<FrooxEngine.Slot>' "Tm90TnVsbE5vZGU8RnJvb3hFbmdpbmUuU2xvdD4="
+NODE 20 'FrooxEngine.LogiX.Operators.NotNullNode<FrooxEngine.Slot>' "Tm90TnVsbE5vZGU8RnJvb3hFbmdpbmUuU2xvdD4="
+NODE 21 'FrooxEngine.LogiX.Operators.AND_Bool' "QU5EX0Jvb2w="
+NODE 23 'FrooxEngine.LogiX.ProgramFlow.IfNode' "SWZOb2Rl"
+NODE 4 'FrooxEngine.LogiX.ProgramFlow.ForNode' "Rm9yTm9kZQ=="
+NODE 3 'FrooxEngine.LogiX.WorldModel.ChildrenCount' "Q2hpbGRyZW5Db3VudA=="
+NODE 5 'FrooxEngine.LogiX.WorldModel.GetChild' "R2V0Q2hpbGQ="
+NODE 14 'FrooxEngine.LogiX.WorldModel.FindChildByName' "RmluZENoaWxkQnlOYW1l"
+NODE 13 'FrooxEngine.LogiX.WorldModel.FindChildByName' "RmluZENoaWxkQnlOYW1l"
+NODE 18 'FrooxEngine.LogiX.Operators.NotNullNode<FrooxEngine.Slot>' "Tm90TnVsbE5vZGU8RnJvb3hFbmdpbmUuU2xvdD4="
+NODE 22 'FrooxEngine.LogiX.ProgramFlow.IfNode' "SWZOb2Rl"
+NODE 12 'FrooxEngine.LogiX.WorldModel.GetSlotName' "R2V0U2xvdE5hbWU="
+NODE 29 'FrooxEngine.LogiX.WorldModel.GetSlotName' "R2V0U2xvdE5hbWU="
+NODE 30 'FrooxEngine.LogiX.Operators.NotNullNode<FrooxEngine.Slot>' "Tm90TnVsbE5vZGU8RnJvb3hFbmdpbmUuU2xvdD4="
+NODE 32 'FrooxEngine.LogiX.ProgramFlow.IfNode' "SWZOb2Rl"
+NODE 33 'FrooxEngine.LogiX.ProgramFlow.IfNode' "SWZOb2Rl"
+NODE 34 'FrooxEngine.LogiX.Data.ReadDynamicVariable<System.Single>' "UmVhZER5bmFtaWNWYXJpYWJsZTxTeXN0ZW0uU2luZ2xlPg=="
+NODE 36 'FrooxEngine.LogiX.Data.WriteDynamicVariable<System.Single>' "V3JpdGVEeW5hbWljVmFyaWFibGU8U3lzdGVtLlN0cmluZz4="
+NODE 37 'FrooxEngine.LogiX.Input.StringInput' "U3RyaW5nSW5wdXQ="
+NODE 31 'FrooxEngine.LogiX.WorldModel.FindChildByName' "RmluZENoaWxkQnlOYW1l"
+NODE 25 'FrooxEngine.LogiX.WorldModel.ChildrenCount' "Q2hpbGRyZW5Db3VudA=="
+NODE 28 'FrooxEngine.LogiX.WorldModel.GetChild' "R2V0Q2hpbGQ="
+NODE 38 'FrooxEngine.LogiX.Input.BoolInput' "Qm9vbElucHV0"
+NODE 26 'FrooxEngine.LogiX.ProgramFlow.ForNode' "Rm9yTm9kZQ=="
+NODE 7 'FrooxEngine.LogiX.Operators.NotNullNode<FrooxEngine.Slot>' "Tm90TnVsbE5vZGU8RnJvb3hFbmdpbmUuU2xvdD4="
+SETCONST 2 "QXZhdGFyUm9vdA=="
+SETCONST 11 "Q3VycmVudEVtb3Rl"
+SETCONST 17 "QmxlbmRzaGFwZXM="
+SETCONST 37 "dmFsdWU="
+SETCONST 38 "ZmFsc2U="
 POS 2 380 100
 POS 6 -240 300
-POS 7 -60 360
 POS 8 -660 300
 POS 9 -320 440
 POS 10 180 440
@@ -72,6 +71,7 @@ POS 25 -260 1160
 POS 28 140 1160
 POS 38 360 580
 POS 26 -100 1140
+POS 7 -80 300
 INPUT 14 'Name' 2 '*'
 INPUT 4 'Count' 3 '*'
 INPUT 5 'ChildIndex' 4 'Iteration'
