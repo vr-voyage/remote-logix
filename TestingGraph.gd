@@ -1,8 +1,24 @@
 extends Control
 
+export(String) var logix_program_dirpath = "user://"
+export(String) var logix_program_filename_prefix = "logix_program_"
+export(String) var logix_program_extension = "slx"
+
 export(NodePath) var path_graph
 onready var graph:GraphEdit = get_node(path_graph)
 #onready var graph:GraphEdit = $"TabContainer/Maincontainer/Program"
+
+export(NodePath) var path_tabs
+onready var ui_tabs = get_node(path_tabs)
+
+export(NodePath) var path_scripts_list
+onready var ui_scripts_list:ItemList = get_node(path_scripts_list)
+
+export(NodePath) var path_script_selected_text
+onready var ui_script_selected_text:TextEdit = get_node(path_script_selected_text)
+
+export(NodePath) var path_nodes_definitions_text
+onready var ui_nodes_definitions_text = get_node(path_nodes_definitions_text)
 
 export(NodePath) var path_editor_slots_types
 onready var ui_slot_types_option:OptionButton = get_node(path_editor_slots_types)
@@ -52,7 +68,8 @@ onready var ui_edited_type_name:LineEdit = get_node(path_edited_type_name)
 export(NodePath) var path_edited_type_color
 onready var ui_edited_type_color:ColorPicker = get_node(path_edited_type_color)
 
-export(String) var definitions_filepath = "data/definitions.json"
+export(String) var definitions_filepath = "user://nodes_definitions.json"
+export(String) var base_definitions_filepath = "res://data/definitions.json"
 
 var useable_nodes:LXNodeDefs = LXNodeDefs.new()
 
@@ -662,11 +679,15 @@ func prepare_popup_menu() -> void:
 		var logix_node_model:LXNode = useable_nodes.get_model_node_at(idx)
 		ui_popup_menu.add_item(logix_node_model.get_full_title(), idx)
 
+func _ui_nodes_definitions_text_refresh() -> void:
+	ui_nodes_definitions_text.text = JSON.print(useable_nodes.serialize(), "\t")
+
 func _ui_refresh_nodes_list() -> void:
 	ui_nodes_list_option.clear()
 	for idx in useable_nodes.sorted_nodes_indices:
 		var logix_node:LXNode = useable_nodes.get_model_node_at(idx)
 		ui_nodes_list_option.add_item(logix_node.get_full_title(), idx)
+	_ui_nodes_definitions_text_refresh()
 
 func _ui_refresh_nodes_list_keep_selection() -> void:
 	var selected_id:int = ui_nodes_list_option.get_selected_id()
@@ -688,14 +709,21 @@ func _ui_refresh_types_lists() -> void:
 		ui_type_editor_list.select(edited_type_idx)
 
 	ui_slot_types_option.select(previous_edited_slot_type_idx)
+	_ui_nodes_definitions_text_refresh()
 
 func prepare_editor() -> void:
 	_ui_refresh_nodes_list()
 	_ui_refresh_types_lists()
 
+
+func load_saved_definitions_nodes():
+	if not load_definitions_from(definitions_filepath):
+		_copy_base_definitions(base_definitions_filepath, definitions_filepath)
+		if not load_definitions_from(definitions_filepath):
+			load_definitions_from(base_definitions_filepath)
+
 func refresh_menus() -> void:
 	#prepare_useable_nodes()
-	load_definitions_from(definitions_filepath)
 	prepare_popup_menu()
 	prepare_editor()
 
@@ -712,6 +740,27 @@ func save_definitions_to(filepath:String) -> bool:
 			"Error code : " + str(err))
 
 	return err == OK
+
+func _copy_base_definitions(from_filepath:String, to_filepath:String) -> bool:
+	var from_file:File = File.new()
+	var err:int = from_file.open(from_filepath, File.READ)
+	if err != OK:
+		printerr("[BUG] Could not open the base definitions file !")
+		printerr("Error code : %d" % [err])
+		return false
+
+	var to_file:File = File.new()
+	err = to_file.open(to_filepath, File.WRITE)
+	if err != OK:
+		printerr("[BUG] Could not open the target definitions file")
+		printerr("Error code : %d" % [err])
+		return false
+
+	to_file.store_string(from_file.get_as_text())
+	to_file.close()
+	from_file.close()
+
+	return true
 
 func load_definitions_from(filepath:String) -> bool:
 	var f:File = File.new()
@@ -738,11 +787,15 @@ func load_definitions_from(filepath:String) -> bool:
 	var new_defs:LXNodeDefs = LXNodeDefs.from_serialized(parse_result.result)
 	if new_defs != null:
 		useable_nodes = new_defs
+		printerr("Loaded definitions from %s" % [definitions_filepath])
 	return new_defs != null
 
 
 func _ready():
+	load_saved_definitions_nodes()
 	refresh_menus()
+	_ui_scripts_list_refresh()
+	get_tree().connect("files_dropped", self, "_on_files_dropped")
 
 
 func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
@@ -1100,7 +1153,7 @@ func _parse_setconst_line(script_line:String, state:Dictionary):
 
 	node.set_values(values)
 
-func load_script(program_script:String):
+func _load_script(program_script:String):
 	var state = {"nodes": {}}
 	graph.clear_connections()
 	for child in graph.get_children():
@@ -1123,13 +1176,15 @@ func load_script(program_script:String):
 			"SETCONST":
 				_parse_setconst_line(line, state)
 
-func save_program(program_name:String):
-	var serialized_program:String = serialize_current_program(program_name)
-	printerr(serialized_program)
-	# SLX for Serialized LogiX
-	var extension_name:String = "slx"
-	var program_filename:String = "logix_program_" + program_name + "." + extension_name
-	var program_filepath:String = "programs/" + program_filename
+func _get_logix_program_filepath_for(script_name:String) -> String:
+	return (
+		logix_program_dirpath +
+		logix_program_filename_prefix +
+		script_name + "." +
+		logix_program_extension)
+
+func _save_script(program_name:String, serialized_program:String) -> bool:
+	var program_filepath:String = _get_logix_program_filepath_for(program_name)
 	var f = File.new()
 	var err:int = f.open(program_filepath, File.WRITE)
 	if err == OK:
@@ -1139,26 +1194,43 @@ func save_program(program_name:String):
 		printerr(
 			"Could not open " + program_filepath + " :\n" +
 			"Code : " + str(err))
+	return err == OK
 
-func load_program(program_filename:String) -> bool:
+func save_program(program_name:String) -> bool:
+	var serialized_program:String = serialize_current_program(program_name)
+	printerr(serialized_program)
+	# SLX for Serialized LogiX
+	return _save_script(program_name, serialized_program)
+
+func _get_script_content(script_name:String):
+	var script_filepath:String = _get_logix_program_filepath_for(script_name)
 	var f:File = File.new()
-
-	var err:int = f.open(program_filename, File.READ)
+	var err:int = f.open(script_filepath, File.READ)
 	if err != OK:
-		printerr(
-			"Could not open " + program_filename + ".\n" +
-			"Error code : " + str(err))
-		return false
+		printerr("Could not open %s.\nError code : %d" % [script_filepath, err])
+		return null
 
-	var serialized_program:String = f.get_as_text()
+	var content:String = f.get_as_text()
 	f.close()
+	return content
+
+func load_program(program_name:String) -> bool:
+	var program_script:String = _get_script_content(program_name)
+	if program_script == null:
+		return false
 
 	# FIXME Make the thing optionnaly atomic.
 	# Half broken programs, might not be what people want.
 	# Still, it's sometimes better than losing everything.
-	load_script(serialized_program)
+	_load_script(program_script)
 
 	return true
+
+# FIXME There's inconsistencies with the 'program' and 'scripts'
+# naming.
+func delete_program(program_name:String) -> int:
+	var d:Directory = Directory.new()
+	return d.remove(_get_logix_program_filepath_for(program_name))
 
 func _get_program_name() -> String:
 	return ui_program_name_text.text
@@ -1412,7 +1484,6 @@ func _save_type_changes():
 		LXNode.change_type_idx_name(edited_type_idx, ui_edited_type_name.text)
 		LXNode.change_type_idx_color(edited_type_idx, ui_edited_type_color.color)
 	save_definitions_to(definitions_filepath)
-	
 
 func _on_TypesEditor_AddButton_pressed():
 	# Small hack to avoid losing changes
@@ -1424,7 +1495,6 @@ func _on_TypesEditor_AddButton_pressed():
 	_ui_refresh_types_lists()
 	editing_new = true
 	ui_type_editor_list.emit_signal("item_selected", added_idx)
-	pass # Replace with function body.
 
 var edited_type_idx:int = 0
 func _on_List_item_selected(index):
@@ -1436,8 +1506,6 @@ func _on_List_item_selected(index):
 		editing_new = false
 		ui_edited_type_name.select_all()
 		ui_edited_type_name.grab_focus()
-	pass # Replace with function body.
-
 
 func _on_NodesDefinitions_SaveButton_pressed():
 	_save_type_changes()
@@ -1446,14 +1514,12 @@ func _on_ColorPicker_color_changed(color):
 	_save_type_changes()
 	_ui_refresh_types_lists()
 
-
 func _on_TypeNameInput_text_entered(new_text):
 	_save_type_changes()
 	_ui_refresh_types_lists()
 
-
 func _on_Button_pressed():
-	load_program("programs/logix_program_" + ui_program_name_text.text + ".slx")
+	load_program("user://logix_program_" + ui_program_name_text.text + ".slx")
 	pass # Replace with function body.
 
 
@@ -1484,26 +1550,151 @@ func _on_RowsInput_value_changed(value):
 	if selected_node_model is LXConstValue:
 		selected_node_model.editor_grid_size.y = value
 
-
 func _on_SlotNameInput_text_changed(new_text):
 	if edited_slot == invalid_node:
 		printerr("[BUG] Trying to edit a null slot !")
 	edited_slot.title = new_text
 	_ui_refresh_edited_node_refresh_slots()
-	pass # Replace with function body.
 
 func _on_ClassNameInput_focus_exited():
 	_selected_node_model_change_name(ui_edited_node_class_name_input.text)
-	pass # Replace with function body.
 
 func _on_SlotNameInput_focus_entered():
 	if edited_slot == invalid_node:
 		printerr("[BUG] Trying to edit a null slot !")
 	edited_slot.title = ui_edited_node_slot_name.text
 	_ui_refresh_edited_node_refresh_slots()
-	pass # Replace with function body.
-
 
 func _on_SendButton_pressed():
 	$TabContainer/Websocket.send_string(serialize_current_program(_get_program_name()))
+
+func _script_name_looks_valid(script_path:String) -> bool:
+	# Be careful, filename seems to be a key property on Godot
+	var fname:String = script_path.get_file()
+	var ext:String   = script_path.get_extension()
+
+	printerr("%s :\nbname : %s\next : %s" % [script_path, fname, ext])
+	return (
+		fname.begins_with(logix_program_filename_prefix) and
+		ext == logix_program_extension)
+
+func _script_name_get_from_path(script_path:String) -> String:
+	return script_path.get_file().get_basename().replace(logix_program_filename_prefix, "")
+
+func _ui_scripts_list_refresh():
+	ui_scripts_list.clear()
+	var dir:Directory = Directory.new()
+	var err = dir.open(logix_program_dirpath)
+	if err != OK:
+		# FIXME That's a SERIOUS issue. Print a clear
+		# warning on the screen !
+		printerr(
+			"Could not open programs directory %s.\n" +
+			"Error : %d" % [logix_program_dirpath, err])
+		return
+
+	printerr("Refreshing")
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and _script_name_looks_valid(file_name):
+			print("Found file: " + file_name)
+			ui_scripts_list.add_item(_script_name_get_from_path(file_name))
+		file_name = dir.get_next()
+	dir.list_dir_end()
+
+func _on_ScriptsList_item_selected(index):
+	var script_name:String = ui_scripts_list.get_item_text(index)
+	var content:String = _get_script_content(script_name)
+	if content != null:
+		ui_script_selected_text.text = content
+
+enum TABS { SAVED_PROGRAMS, LOGIX_NODES, NODES_EDITOR, WEBSOCKET }
+
+func _on_ScriptsList_item_activated(index):
+	if load_program(ui_scripts_list.get_item_text(index)):
+		ui_tabs.current_tab = TABS.LOGIX_NODES
+
+func _on_TabContainer_tab_selected(tab):
+	if tab == TABS.SAVED_PROGRAMS:
+		_ui_scripts_list_refresh()
+
+var program_right_clicked:String
+func _on_FileDeletionConfirmation_confirmed():
+	if program_right_clicked != null:
+		delete_program(program_right_clicked)
+		_ui_scripts_list_refresh()
+		ui_script_selected_text.text = ""
+
+
+func _on_FileContextMenu_id_pressed(id):
+	if id == 2:
+		$FileDeletionConfirmation.popup_centered()
+
+
+func _on_ScriptsList_item_rmb_selected(index, at_position):
+	program_right_clicked = ui_scripts_list.get_item_text(index)
+	# FIXME Last minute hack because I'm fucking fed up
+	# of Godot retarded behaviours.
+	# I want to display the popup at the bottom right of the
+	# cursor, to avoid having "Delete" selected by default !
+	# But NOOOO, Godot will display THAT popup centered.
+	
+	$FileContextMenu.set_position(at_position + Vector2(30,30))
+	$FileContextMenu.popup()
 	pass # Replace with function body.
+
+
+func _on_FileContextMenu_focus_exited():
+	$FileContextMenu.hide()
+	pass # Replace with function body.
+
+func _read_file_content(filepath:String) -> String:
+	var f:File = File.new()
+	var err:int = f.open(filepath, File.READ)
+	if err != OK:
+		printerr("Could not read file %s.\nError code : %d" % [filepath, err])
+		return ""
+	var content:String = f.get_as_text()
+	f.close()
+	return content
+
+func _on_files_dropped(filepaths:PoolStringArray, screen) -> void:
+	# FIXME Dubious check. Check if that actually happen
+	if len(filepaths) == 0:
+		return
+
+	match ui_tabs.current_tab:
+		TABS.NODES_EDITOR:
+			var potential_filename:String = filepaths[0]
+			if potential_filename.ends_with("json"):
+				if load_definitions_from(filepaths[0]):
+					_ui_reset_editor()
+		TABS.SAVED_PROGRAMS:
+			# FIXME Last minute hack. Add proper error handling, at least
+			for filepath in filepaths:
+				if not filepath.ends_with(logix_program_extension):
+					continue
+				var program_filename:String = filepath.get_file().get_basename()
+				# Avoid corner cases
+				if program_filename.begins_with(logix_program_filename_prefix):
+					program_filename = program_filename.replace(
+						logix_program_filename_prefix, "")
+				_save_script(program_filename, _read_file_content(filepath))
+				_ui_scripts_list_refresh()
+
+func _ui_reset_editor():
+	ui_edited_node_slots_input_list.clear()
+	ui_edited_node_slots_output_list.clear()
+	ui_edited_node_slot_name.text = ""
+	ui_edited_node_class_name_input.text = ""
+	ui_type_editor_list.clear()
+	refresh_menus()
+
+func _on_ReloadDefaultsDefButton_pressed():
+	printerr("Reloading base definitions")
+	selected_node_model = invalid_node
+	edited_slot = invalid_slot
+	_ui_reset_editor()
+	load_definitions_from(base_definitions_filepath)
+

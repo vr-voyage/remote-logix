@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://FileSelectorItem.gd" type="Script" id=1]
+[ext_resource path="res://large_fonts.tres" type="Theme" id=2]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+margin_right = 630.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 64 )
+size_flags_horizontal = 3
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="Button" parent="."]
+margin_right = 630.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+text = "Ugly as shit !"
+flat = true
+align = 0

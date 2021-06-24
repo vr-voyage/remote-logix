@@ -1,12 +1,39 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://LogixNode.gd" type="Script" id=1]
+[sub_resource type="GDScript" id=1]
+script/source = "extends GraphNode
+
+var inputs:Array = Array()
+
+export(PoolStringArray) var input_names;
+
+func get_input_name(var idx:int) -> String:
+	if idx < len(input_names):
+		return input_names[idx]
+	return \"\"
+
+func set_input_connection(
+	slot_number:int,
+	graph_node:GraphNode, 
+	graph_node_output_slot:int):
+
+	if len(inputs) <= slot_number:
+		inputs.resize(slot_number+1)
+
+	inputs[slot_number] = {
+		\"from_name\": graph_node.name,
+		\"output\": graph_node_output_slot
+	}
+
+func remove_connection(slot_number:int):
+	inputs[slot_number] = null
+"
 
 [node name="GraphNode" type="GraphNode"]
 margin_left = 308.0
 margin_right = 340.0
 margin_bottom = 84.0
-script = ExtResource( 1 )
+script = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
