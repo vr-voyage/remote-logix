@@ -1203,16 +1203,7 @@ func save_program(program_name:String) -> bool:
 	return _save_script(program_name, serialized_program)
 
 func _get_script_content(script_name:String):
-	var script_filepath:String = _get_logix_program_filepath_for(script_name)
-	var f:File = File.new()
-	var err:int = f.open(script_filepath, File.READ)
-	if err != OK:
-		printerr("Could not open %s.\nError code : %d" % [script_filepath, err])
-		return null
-
-	var content:String = f.get_as_text()
-	f.close()
-	return content
+	return _read_file_content(_get_logix_program_filepath_for(script_name))
 
 func load_program(program_name:String) -> bool:
 	var program_script:String = _get_script_content(program_name)
@@ -1649,12 +1640,12 @@ func _on_FileContextMenu_focus_exited():
 	$FileContextMenu.hide()
 	pass # Replace with function body.
 
-func _read_file_content(filepath:String) -> String:
+func _read_file_content(filepath:String):
 	var f:File = File.new()
 	var err:int = f.open(filepath, File.READ)
 	if err != OK:
 		printerr("Could not read file %s.\nError code : %d" % [filepath, err])
-		return ""
+		return null
 	var content:String = f.get_as_text()
 	f.close()
 	return content
@@ -1680,7 +1671,11 @@ func _on_files_dropped(filepaths:PoolStringArray, screen) -> void:
 				if program_filename.begins_with(logix_program_filename_prefix):
 					program_filename = program_filename.replace(
 						logix_program_filename_prefix, "")
-				_save_script(program_filename, _read_file_content(filepath))
+				var script_content = _read_file_content(filepath)
+				if script_content == null:
+					printerr("Skipping %s since the file cannot be read" % [filepath])
+					continue
+				_save_script(program_filename, script_content)
 				_ui_scripts_list_refresh()
 
 func _ui_reset_editor():
@@ -1697,4 +1692,11 @@ func _on_ReloadDefaultsDefButton_pressed():
 	edited_slot = invalid_slot
 	_ui_reset_editor()
 	load_definitions_from(base_definitions_filepath)
+
+func _focus_tab_logix():
+	ui_tabs.current_tab = TABS.LOGIX_NODES
+
+func _on_LoadExampleButton_pressed():
+	_load_script(_read_file_content("res://programs/logix_program_Example.slx"))
+	_focus_tab_logix()
 

@@ -11,10 +11,10 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-path_graph = NodePath("TabContainer/Logix/Program")
+path_graph = NodePath("TabContainer/LogiX/Program")
 path_tabs = NodePath("TabContainer")
-path_scripts_list = NodePath("TabContainer/Saved_Programs/ScrollContainer/ScriptsList")
-path_script_selected_text = NodePath("TabContainer/Saved_Programs/SelectedScriptText")
+path_scripts_list = NodePath("TabContainer/Saved_Programs/HSplitContainer/ScrollContainer/ScriptsList")
+path_script_selected_text = NodePath("TabContainer/Saved_Programs/HSplitContainer/SelectedScriptText")
 path_nodes_definitions_text = NodePath("TabContainer/Nodes_editor/NodesDefinitionText")
 path_editor_slots_types = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions")
 path_editor_node_slot_name = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput")
@@ -26,9 +26,9 @@ path_editor_node_input_grid_columns_spinbox = NodePath("TabContainer/Nodes_edito
 path_editor_node_input_grid_rows_spinbox = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/ConstantInputEditor/HBoxContainer/RowsInput")
 path_editor_inputs_slots_list = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Inputs/List")
 path_editor_outputs_slots_list = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/AvailableSlots/Outputs/List")
-path_save_button = NodePath("TabContainer/Logix/Program/Metadata/SaveButton")
+path_save_button = NodePath("TabContainer/LogiX/Program/PanelContainer/Metadata/SaveButton")
 path_popup_menu = NodePath("PopupMenu")
-path_program_name_input = NodePath("TabContainer/Logix/Program/Metadata/NameInput")
+path_program_name_input = NodePath("TabContainer/LogiX/Program/PanelContainer/Metadata/NameInput")
 path_editor_types_list = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/List")
 path_edited_type_name = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NameInput")
 path_edited_type_color = NodePath("TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins/ColorPicker")
@@ -48,7 +48,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Saved_Programs" type="HSplitContainer" parent="TabContainer"]
+[node name="Saved_Programs" type="VBoxContainer" parent="TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -56,28 +56,46 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Saved_Programs"]
+[node name="HSplitContainer" type="HSplitContainer" parent="TabContainer/Saved_Programs"]
+margin_right = 1272.0
+margin_bottom = 660.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Saved_Programs/HSplitContainer"]
 margin_right = 630.0
-margin_bottom = 684.0
+margin_bottom = 660.0
 size_flags_horizontal = 3
 
-[node name="ScriptsList" type="ItemList" parent="TabContainer/Saved_Programs/ScrollContainer"]
+[node name="ScriptsList" type="ItemList" parent="TabContainer/Saved_Programs/HSplitContainer/ScrollContainer"]
 margin_right = 630.0
-margin_bottom = 684.0
+margin_bottom = 660.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 3 )
 custom_constants/vseparation = 8
 allow_rmb_select = true
 
-[node name="SelectedScriptText" type="TextEdit" parent="TabContainer/Saved_Programs"]
+[node name="SelectedScriptText" type="TextEdit" parent="TabContainer/Saved_Programs/HSplitContainer"]
 margin_left = 642.0
 margin_right = 1272.0
-margin_bottom = 684.0
+margin_bottom = 660.0
 size_flags_horizontal = 3
 readonly = true
 
-[node name="Logix" type="VBoxContainer" parent="TabContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Saved_Programs"]
+margin_top = 664.0
+margin_right = 1272.0
+margin_bottom = 684.0
+alignment = 1
+
+[node name="LoadExampleButton" type="Button" parent="TabContainer/Saved_Programs/HBoxContainer"]
+margin_left = 557.0
+margin_right = 715.0
+margin_bottom = 20.0
+text = "Load example program"
+
+[node name="LogiX" type="VBoxContainer" parent="TabContainer"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -91,65 +109,124 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Program" type="GraphEdit" parent="TabContainer/Logix"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/LogiX"]
+margin_right = 1272.0
+alignment = 2
+
+[node name="Program" type="GraphEdit" parent="TabContainer/LogiX"]
+margin_top = 4.0
 margin_right = 1272.0
 margin_bottom = 684.0
 size_flags_vertical = 3
 right_disconnects = true
 scroll_offset = Vector2( -8, -24 )
 
-[node name="Metadata" type="HBoxContainer" parent="TabContainer/Logix/Program"]
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/LogiX/Program"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -41.0
-margin_right = -16.0
-margin_bottom = 40.0
+margin_left = -553.0
+margin_right = 10.0
+margin_bottom = 38.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Metadata" type="HBoxContainer" parent="TabContainer/LogiX/Program/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 556.0
+margin_bottom = 31.0
 grow_horizontal = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="TabContainer/Logix/Program/Metadata"]
+[node name="Button" type="Button" parent="TabContainer/LogiX/Program/PanelContainer/Metadata"]
+visible = false
 margin_right = 42.0
 margin_bottom = 40.0
 text = "Load"
 
-[node name="NameLabel" type="Label" parent="TabContainer/Logix/Program/Metadata"]
-margin_left = 46.0
-margin_top = 13.0
-margin_right = 147.0
-margin_bottom = 27.0
+[node name="NameLabel" type="Label" parent="TabContainer/LogiX/Program/PanelContainer/Metadata"]
+margin_top = 5.0
+margin_right = 101.0
+margin_bottom = 19.0
 text = "Program name :"
 
-[node name="NameInput" type="LineEdit" parent="TabContainer/Logix/Program/Metadata"]
-margin_left = 151.0
-margin_right = 271.0
-margin_bottom = 40.0
+[node name="NameInput" type="LineEdit" parent="TabContainer/LogiX/Program/PanelContainer/Metadata"]
+margin_left = 105.0
+margin_right = 225.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 120, 0 )
 caret_blink = true
 caret_blink_speed = 0.5
 
-[node name="SaveButton" type="Button" parent="TabContainer/Logix/Program/Metadata"]
-margin_left = 275.0
-margin_right = 316.0
-margin_bottom = 40.0
+[node name="SaveButton" type="Button" parent="TabContainer/LogiX/Program/PanelContainer/Metadata"]
+margin_left = 229.0
+margin_right = 270.0
+margin_bottom = 24.0
 grow_horizontal = 0
 text = "Save"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="TabContainer/Logix/Program/Metadata"]
-margin_left = 320.0
-margin_right = 384.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 64, 0 )
+[node name="Control" type="Control" parent="TabContainer/LogiX/Program/PanelContainer/Metadata"]
+margin_left = 274.0
+margin_right = 354.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 80, 0 )
 
-[node name="SendButton" type="Button" parent="TabContainer/Logix/Program/Metadata"]
-margin_left = 388.0
-margin_right = 508.0
-margin_bottom = 40.0
-text = "Send through WS"
+[node name="SendButton" type="Button" parent="TabContainer/LogiX/Program/PanelContainer/Metadata"]
+margin_left = 358.0
+margin_right = 529.0
+margin_bottom = 24.0
+text = "Send through Websocket"
+
+[node name="Websocket" parent="TabContainer" instance=ExtResource( 1 )]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+path_log_list = NodePath("VBoxContainer/ScrollContainer/Logs")
+path_clients_list = NodePath("VBoxContainer/ClientsList")
+connected_color = Color( 0.00392157, 1, 0.698039, 1 )
+disconnected_color = Color( 1, 0.478431, 0.478431, 1 )
+
+[node name="Server" parent="TabContainer/Websocket" index="0"]
+margin_right = 1272.0
+
+[node name="Section" parent="TabContainer/Websocket/Server" index="0"]
+margin_right = 1272.0
+
+[node name="VBoxContainer" parent="TabContainer/Websocket" index="1"]
+margin_right = 1272.0
+margin_bottom = 656.0
+
+[node name="ScrollContainer" parent="TabContainer/Websocket/VBoxContainer" index="0"]
+margin_right = 1014.0
+margin_bottom = 628.0
+
+[node name="Logs" parent="TabContainer/Websocket/VBoxContainer/ScrollContainer" index="0"]
+margin_right = 1014.0
+margin_bottom = 628.0
+
+[node name="ClientsList" parent="TabContainer/Websocket/VBoxContainer" index="1"]
+margin_left = 1018.0
+margin_right = 1272.0
+margin_bottom = 628.0
+
+[node name="RelayClient" parent="TabContainer/Websocket" index="2"]
+margin_top = 660.0
+margin_right = 1272.0
+margin_bottom = 684.0
+
+[node name="HBoxContainer" parent="TabContainer/Websocket/RelayClient" index="0"]
+margin_right = 1272.0
+
+[node name="URIText" parent="TabContainer/Websocket/RelayClient/ConnectionConfiguration" index="2"]
+text = "ws://localhost:9081"
 
 [node name="Nodes_editor" type="HSplitContainer" parent="TabContainer"]
 visible = false
@@ -180,9 +257,9 @@ margin_right = 890.0
 margin_bottom = 20.0
 
 [node name="SaveButton" type="Button" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 64.0
+margin_right = 156.0
 margin_bottom = 20.0
-text = "SaveList"
+text = "Save nodes definitions"
 
 [node name="HSeparator2" type="Control" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer"]
 margin_top = 24.0
@@ -437,6 +514,7 @@ size_flags_horizontal = 3
 margin_top = 102.0
 margin_right = 890.0
 margin_bottom = 122.0
+text = "Create new type"
 
 [node name="NameLabel" type="Label" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor"]
 margin_top = 126.0
@@ -472,10 +550,10 @@ margin_bottom = 462.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="ColorPicker" type="ColorPicker" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
-margin_left = 42.0
-margin_top = 28.0
-margin_right = 904.0
-margin_bottom = 490.0
+margin_left = 26.0
+margin_top = 12.0
+margin_right = 888.0
+margin_bottom = 474.0
 size_flags_horizontal = 3
 
 [node name="MarginRight" type="Control" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
@@ -505,17 +583,6 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 readonly = true
 
-[node name="Websocket" parent="TabContainer" instance=ExtResource( 1 )]
-visible = false
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-path_log_list = NodePath("VBoxContainer/ScrollContainer/Logs")
-path_clients_list = NodePath("VBoxContainer/ClientsList")
-connected_color = Color( 0.00392157, 1, 0.698039, 1 )
-disconnected_color = Color( 1, 0.478431, 0.478431, 1 )
-
 [node name="FileDeletionConfirmation" type="ConfirmationDialog" parent="."]
 window_title = "Veuillez confirmer…"
 dialog_text = "Are you sure you want to delete this file ?"
@@ -526,22 +593,23 @@ items = [ "", null, 0, false, true, 0, 0, null, "", false, "", null, 0, false, t
 [connection signal="focus_exited" from="PopupMenu" to="." method="_on_PopupMenu_focus_exited"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
 [connection signal="tab_selected" from="TabContainer" to="." method="_on_TabContainer_tab_selected"]
-[connection signal="item_activated" from="TabContainer/Saved_Programs/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_item_activated"]
-[connection signal="item_rmb_selected" from="TabContainer/Saved_Programs/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_item_rmb_selected"]
-[connection signal="item_selected" from="TabContainer/Saved_Programs/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_item_selected"]
-[connection signal="rmb_clicked" from="TabContainer/Saved_Programs/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_rmb_clicked"]
-[connection signal="connection_from_empty" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_connection_from_empty"]
-[connection signal="connection_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_connection_request"]
-[connection signal="connection_to_empty" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_connection_to_empty"]
-[connection signal="copy_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_copy_nodes_request"]
-[connection signal="delete_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_Program_delete_nodes_request"]
-[connection signal="disconnection_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_disconnection_request"]
-[connection signal="duplicate_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_duplicate_nodes_request"]
-[connection signal="paste_nodes_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_paste_nodes_request"]
-[connection signal="popup_request" from="TabContainer/Logix/Program" to="." method="_on_GraphEdit_popup_request"]
-[connection signal="pressed" from="TabContainer/Logix/Program/Metadata/Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="TabContainer/Logix/Program/Metadata/SaveButton" to="." method="_on_SaveButton_pressed"]
-[connection signal="pressed" from="TabContainer/Logix/Program/Metadata/SendButton" to="." method="_on_SendButton_pressed"]
+[connection signal="item_activated" from="TabContainer/Saved_Programs/HSplitContainer/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_item_activated"]
+[connection signal="item_rmb_selected" from="TabContainer/Saved_Programs/HSplitContainer/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_item_rmb_selected"]
+[connection signal="item_selected" from="TabContainer/Saved_Programs/HSplitContainer/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_item_selected"]
+[connection signal="rmb_clicked" from="TabContainer/Saved_Programs/HSplitContainer/ScrollContainer/ScriptsList" to="." method="_on_ScriptsList_rmb_clicked"]
+[connection signal="pressed" from="TabContainer/Saved_Programs/HBoxContainer/LoadExampleButton" to="." method="_on_LoadExampleButton_pressed"]
+[connection signal="connection_from_empty" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_connection_from_empty"]
+[connection signal="connection_request" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_connection_request"]
+[connection signal="connection_to_empty" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_connection_to_empty"]
+[connection signal="copy_nodes_request" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_copy_nodes_request"]
+[connection signal="delete_nodes_request" from="TabContainer/LogiX/Program" to="." method="_on_Program_delete_nodes_request"]
+[connection signal="disconnection_request" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_disconnection_request"]
+[connection signal="duplicate_nodes_request" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_duplicate_nodes_request"]
+[connection signal="paste_nodes_request" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_paste_nodes_request"]
+[connection signal="popup_request" from="TabContainer/LogiX/Program" to="." method="_on_GraphEdit_popup_request"]
+[connection signal="pressed" from="TabContainer/LogiX/Program/PanelContainer/Metadata/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="TabContainer/LogiX/Program/PanelContainer/Metadata/SaveButton" to="." method="_on_SaveButton_pressed"]
+[connection signal="pressed" from="TabContainer/LogiX/Program/PanelContainer/Metadata/SendButton" to="." method="_on_SendButton_pressed"]
 [connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/HBoxContainer2/SaveButton" to="." method="_on_NodesDefinitions_SaveButton_pressed"]
 [connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/Actions/CreateNodeButon" to="." method="_on_CreateNode_Button_pressed"]
 [connection signal="item_selected" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/NodesListButton" to="." method="_on_NodesListButton_item_selected"]
@@ -558,8 +626,8 @@ items = [ "", null, 0, false, true, 0, 0, null, "", false, "", null, 0, false, t
 [connection signal="text_changed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_changed"]
 [connection signal="text_entered" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_entered"]
 [connection signal="item_selected" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions" to="." method="_on_SlotTypeOptions_item_selected"]
-[connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_DeleteSlotButton_pressed"]
 [connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_DeleteSlotButton_pressed"]
 [connection signal="item_selected" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/List" to="." method="_on_List_item_selected"]
 [connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/AddButton" to="." method="_on_TypesEditor_AddButton_pressed"]
 [connection signal="text_entered" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NameInput" to="." method="_on_TypeNameInput_text_entered"]
