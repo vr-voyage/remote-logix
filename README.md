@@ -64,7 +64,7 @@ to your friends.
 
 ![Restart the game normally](https://raw.githubusercontent.com/vr-voyage/remote-logix/main/screenshots/Neos-Procedure-9.png)
 ![You program is still there !](https://raw.githubusercontent.com/vr-voyage/remote-logix/main/screenshots/Neos-Procedure-10.png)
-![Enjoy !](https://raw.githubusercontent.com/vr-voyage/remote-logix/main/screenshots/Neos-Procedure-10.png)
+![Enjoy !](https://raw.githubusercontent.com/vr-voyage/remote-logix/main/screenshots/Neos-Procedure-11.png)
 
 # Example program
 
