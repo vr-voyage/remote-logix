@@ -302,3 +302,17 @@ the URI of the Websocket relay server and click on `Connect`.
 
 Just click on `Disconnect`, at the right of the `Send through relay server`
 configuration section.
+
+# Support !
+
+I always appreciate some support !
+
+## Patreon & Itch.io
+
+* Patreon : https://www.patreon.com/vrgames_voyage
+* Itch.io : https://voyage-vrsns.itch.io/remote-logix-editor-neosvr
+
+## Ye standard cryptos
+
+* bitcoin: 16zwQUkG29D49G6C7pzch18HjfJqMXFNrW
+* dogecoin: DAqjX8Hgw8bwSoAJoB15y6LwipaHDBtrtW
