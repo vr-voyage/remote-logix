@@ -270,7 +270,8 @@ func _script_define_node(logix_node:LXNode) -> String:
 	var instruction_data:PoolStringArray = PoolStringArray([
 		"NODE",
 		str(logix_node.get_node_id()),
-		_script_quote_string(logix_node.logix_class_name),
+		# logix_node.logix_class_name
+		_script_quote_string(logix_node.get_logix_class_full_name()),
 		# At the moments, title are automatically set up
 		# But that might change
 		_script_user_input_to_base64(logix_node.title)
@@ -851,7 +852,7 @@ func _on_SlotTypeOptions_item_selected(index):
 
 func _on_CreateNode_Button_pressed():
 	printerr("Adding node")
-	var new_id:int = useable_nodes.create_new()
+	var new_id:int = useable_nodes.add_new()
 	_ui_refresh_nodes_list()
 	prepare_popup_menu()
 	var menu_index:int = ui_nodes_list_option.get_item_index(new_id)

@@ -214,7 +214,51 @@ var is_generic_with_menu:bool = false
 var generic_menu = preload("res://nodes_parts/generic_types_menu.tscn")
 
 func _is_generic_with_menu() -> bool:
-	return logix_class_name.find("WriteDynamicVariable") >= 0
+	return logix_class_name.ends_with("`1")
+
+func gen_csharp_names() -> Dictionary:
+	var charp_type_names:Dictionary = {
+		"bool":    "System.Bool",
+		"bool2":   "BaseX.bool2",
+		"bool3":   "BaseX.bool3",
+		"bool4":   "BaseX.bool4",
+		"byte":    "System.Byte",
+		"char":    "System.Char",
+		"color":   "BaseX.color",
+		"floatQ":  "BaseX.floatQ",
+		"doubleQ": "BaseX.doubleQ",
+		"short":   "System.Int16",
+		"int":     "System.Int32",
+		"long":    "System.Int64",
+	}
+	for t in ["bool", "double", "float", "int", "long", "uint", "ulong"]:
+		for n in ["2", "3", "4"]:
+			var short_name:String = t + n
+			charp_type_names[short_name] = "BaseX." + short_name
+	for t in ["float", "double"]:
+		for n in ["2", "3", "4"]:
+			var short_name:String = t + n + "x" + n
+			charp_type_names[short_name] = "BaseX." + short_name
+	return charp_type_names
+
+onready var csharp_names:Dictionary = gen_csharp_names()
+
+func _get_csharp_class_name_for(type:String) -> String:
+	if csharp_names.has(type):
+		return csharp_names[type]
+	else:
+		if type.find(".") >= 0:
+			return type
+		else:
+			return "FrooxEngine." + type
+
+func get_logix_class_full_name() -> String:
+	if not _is_generic_with_menu():
+		return logix_class_name
+	else:
+		var selected_type:String = get_node("GenericMenu").get_selected_type_name()
+		var actual_csharp_name:String = _get_csharp_class_name_for(selected_type)
+		return logix_class_name + "," + actual_csharp_name
 
 func _regenerate_slots() -> void:
 	for child in get_children():
@@ -226,6 +270,7 @@ func _regenerate_slots() -> void:
 	if _is_generic_with_menu():
 		var primitive_types = _get_primitive_types()
 		var menu = generic_menu.instance()
+		menu.name = "GenericMenu"
 		add_child(menu)
 		menu.setup_menu(primitive_types)
 
@@ -345,6 +390,6 @@ func _get_primitive_types() -> PoolStringArray:
 	return primitives_types
 
 
-func _ready():
-	rect_min_size = Vector2(0,80)
+#func _ready():
+#	rect_min_size = Vector2(0,80)
 
