@@ -8,6 +8,34 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "",
+"class": "LXConstValue",
+"language": "GDScript",
+"path": "res://logix/lx_const_value.gd"
+}, {
+"base": "GraphNode",
+"class": "LXNode",
+"language": "GDScript",
+"path": "res://logix/lxnode.gd"
+}, {
+"base": "Control",
+"class": "LXNodeDefs",
+"language": "GDScript",
+"path": "res://logix/lx_node_defs.gd"
+}, {
+"base": "Control",
+"class": "NodeSlot",
+"language": "GDScript",
+"path": "res://logix/node_slot.gd"
+} ]
+_global_script_class_icons={
+"LXConstValue": "",
+"LXNode": "",
+"LXNodeDefs": "",
+"NodeSlot": ""
+}
+
 [application]
 
 config/name="RemoteLogix"
