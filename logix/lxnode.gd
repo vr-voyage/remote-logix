@@ -17,6 +17,8 @@ const CURRENT_ID:Array = Array([1])
 # Do NOT duplicate this value
 var node_id:int = INVALID_NODE_ID setget set_node_id, get_node_id
 
+enum DIRECTION { INVALID, INPUT, OUTPUT, COUNT }
+
 func _generate_default_node_id():
 	# Oh boy, I got owned by this one.
 	# Turns out that the hashing system Godot use is
@@ -45,6 +47,7 @@ const logix_types_colors:Array = [
 	Color(0,0,1,0),
 	Color(0.3,0.3,0.3,1)
 ]
+const unknown_type_color:Color = Color(0.3,0.3,0.3,1)
 
 static func add_logix_type(type_name:String, type_color:Color) -> int:
 	var added_idx:int = len(TYPES)
@@ -104,7 +107,12 @@ static func types_setup_from_serialized(serialized:Array):
 			_color_from_serialized(element["color"]))
 
 static func type_to_value(type_name:String) -> int:
-	return TYPES.find(type_name)
+	var value:int = TYPES.find(type_name)
+	if value < 0:
+		# FIXME This can lead to type names returning the same value
+		# as other valid types, due to some coincidence.
+		value = type_name.hash()
+	return value
 
 static func _valid_type_idx(type_idx:int) -> bool:
 	return 0 <= type_idx and type_idx < len(TYPES)
@@ -122,11 +130,16 @@ static func _clamp_type_idx(logix_type:int) -> int:
 	printerr("Unknown type : " + str(logix_type))
 	return 0
 
-static func _color_for_idx(logix_type_idx:int) -> Color:
-	return logix_types_colors[_clamp_type_idx(logix_type_idx)]
+static func _color_for_type_value(logix_type_value:int) -> Color:
+	var color:Color
+	if _valid_type_idx(logix_type_value):
+		color = logix_types_colors[logix_type_value]
+	else:
+		color = unknown_type_color
+	return color
 
 static func _color_for(logix_type_name:String) -> Color:
-	return _color_for_idx(TYPES.find(logix_type_name))
+	return _color_for_type_value(TYPES.find(logix_type_name))
 
 func _add_slot_to(list:Array) -> NodeSlot:
 	var node_to_add:NodeSlot = NodeSlot.new("undefined", TYPES[0])
@@ -158,7 +171,7 @@ func delete_slot(slot:NodeSlot) -> bool:
 		" in " + logix_class_name)
 	return false
 
-enum DIRECTION { INVALID, INPUT, OUTPUT, COUNT }
+
 
 # FIXME ??? Remove this when possible
 func get_short_title() -> String:
@@ -176,45 +189,48 @@ func _title_name() -> String:
 		var generic_part:String = logix_class_name.substr(0, bracket_pos)
 		return generic_part.get_extension() + specialization_part
 
+# TBD : Move away ?
+var generic_class_names:Array = Array()
+
 func set_class_name(new_logix_class_name:String):
-	logix_class_name = new_logix_class_name
+	var class_names:PoolStringArray = new_logix_class_name.split(",")
+	self.logix_class_name = class_names[0]
+	for i in range(1, len(class_names)):
+		generic_class_names.append(_get_short_name(class_names[i]))
 	self.title = _title_name()
 
 func _valid_dir_value(dir_value:int) -> bool:
 	return DIRECTION.INVALID < dir_value and dir_value < DIRECTION.COUNT
 
 var simple_io = preload("res://nodes_parts/simple_io.tscn")
-func _display_slot(
-	slot_def:NodeSlot,
-	direction:int):
 
+func _set_input_slot(slot_idx:int, slot_def:NodeSlot):
+	var new_slot_type:int = type_to_value(slot_def.logix_type)
+	set_slot(slot_idx, 
+		true, new_slot_type, _color_for_type_value(new_slot_type),
+		false, INVALID_SLOT_TYPE, INVALID_SLOT_COLOR)
+
+func _set_output_slot(slot_idx:int, slot_def:NodeSlot):
+	var new_slot_type:int = type_to_value(slot_def.logix_type)
+	set_slot(slot_idx,
+		false, INVALID_SLOT_TYPE, INVALID_SLOT_COLOR,
+		true, new_slot_type, _color_for_type_value(new_slot_type))
+
+func _display_slot(slot_def:NodeSlot, direction:int):
 	if not _valid_dir_value(direction):
 		printerr("Invalid direction value : " + str(direction))
 		return
 
 	var n_slots:int = get_child_count()
-	var new_slot_type:int = type_to_value(slot_def.logix_type)
-
 	var label = simple_io.instance()
 	label.setup_io(slot_def.title, slot_def.logix_type)
 	add_child(label)
 	match direction:
 		DIRECTION.INPUT:
-			set_slot(n_slots, 
-				true, new_slot_type, _color_for_idx(new_slot_type),
-				false, INVALID_SLOT_TYPE, INVALID_SLOT_COLOR)
+			_set_input_slot(n_slots, slot_def)
 		DIRECTION.OUTPUT:
-			set_slot(n_slots,
-				false, INVALID_SLOT_TYPE, INVALID_SLOT_COLOR,
-				true, new_slot_type, _color_for_idx(new_slot_type))
+			_set_output_slot(n_slots, slot_def)
 			label.align = Label.ALIGN_RIGHT
-
-var is_generic:bool           = false
-var is_generic_with_menu:bool = false
-var generic_menu = preload("res://nodes_parts/generic_types_menu.tscn")
-
-func _is_generic_with_menu() -> bool:
-	return logix_class_name.ends_with("`1")
 
 func gen_csharp_names() -> Dictionary:
 	var charp_type_names:Dictionary = {
@@ -252,13 +268,14 @@ func _get_csharp_class_name_for(type:String) -> String:
 		else:
 			return "FrooxEngine." + type
 
+func _get_short_name(full_type_name:String) -> String:
+	for k in csharp_names.keys():
+		if csharp_names[k] == full_type_name:
+			return k
+	return full_type_name
+
 func get_logix_class_full_name() -> String:
-	if not _is_generic_with_menu():
-		return logix_class_name
-	else:
-		var selected_type:String = get_node("GenericMenu").get_selected_type_name()
-		var actual_csharp_name:String = _get_csharp_class_name_for(selected_type)
-		return logix_class_name + "," + actual_csharp_name
+	return logix_class_name
 
 func _regenerate_slots() -> void:
 	for child in get_children():
@@ -267,12 +284,6 @@ func _regenerate_slots() -> void:
 		_display_slot(input_slot, DIRECTION.INPUT)
 	for output_slot in outputs:
 		_display_slot(output_slot, DIRECTION.OUTPUT)
-	if _is_generic_with_menu():
-		var primitive_types = _get_primitive_types()
-		var menu = generic_menu.instance()
-		menu.name = "GenericMenu"
-		add_child(menu)
-		menu.setup_menu(primitive_types)
 
 func refresh_slots_style():
 	_regenerate_slots()
@@ -310,23 +321,6 @@ func configure_from_serialized(serialized_node:Dictionary) -> bool:
 	set_io(deser_inputs, deser_outputs)
 	return true
 
-#static func from_serialized_def(serialized_node:Dictionary) -> LXNode:
-#	if (not serialized_node.has("inputs") or 
-#		not serialized_node.has("outputs") or
-#		not serialized_node.has("classname")):
-#		printerr("Missing fields in serialized node definition :\n" +
-#			"inputs, outputs.\n" +
-#			"Definition :" + str(serialized_node))
-#		return null
-#	var deser_inputs:Array = Array()
-##	var deser_outputs:Array = Array()
-#	_parse_slots(serialized_node["inputs"], deser_inputs)
-#	_parse_slots(serialized_node["outputs"], deser_outputs)
-#	var logix_node:LXNode = LXNode.new()
-#	logix_node.set_class_name(serialized_node["classname"])
-#	logix_node.set_io(deser_inputs, deser_outputs)
-#	return logix_node
-
 func _serialize_slots_defs(slots_list:Array, defs_list:Array):
 	for slot in slots_list:
 		printerr(slot)
@@ -340,15 +334,20 @@ func serialize_def() -> Dictionary:
 	return {
 		"classname": logix_class_name,
 		"inputs": serialized_inputs,
-		"outputs": serialized_outputs}
+		"outputs": serialized_outputs,
+		"type": "Standard"
+	}
 
 func complete_dup():
 	var duplicate_node = self.duplicate()
 	# These fields are kind of 'constant' anyway, so that
 	# should do the trick for now
-	duplicate_node.inputs = self.inputs
-	duplicate_node.outputs = self.outputs
-	duplicate_node.logix_class_name = self.logix_class_name
+	duplicate_node.inputs              = self.inputs
+	duplicate_node.outputs             = self.outputs
+	duplicate_node.logix_class_name    = self.logix_class_name
+	duplicate_node.generic_class_names = self.generic_class_names
+	# FIXME Make this a constant !
+	duplicate_node.csharp_names = csharp_names
 	return duplicate_node
 
 func _get_name_from_list(idx:int, list:Array) -> String:
@@ -378,18 +377,14 @@ func get_output_idx(output_name:String) -> int:
 			return i
 	return -1
 
-func _is_lowercase_string(s:String) -> bool:
+# FIXME Move this away
+static func _is_lowercase_string(s:String) -> bool:
 	return s.to_lower() == s
 
 # This should be prepared once and for all !
-func _get_primitive_types() -> PoolStringArray:
+static func get_primitive_types() -> PoolStringArray:
 	var primitives_types:PoolStringArray = PoolStringArray()
 	for t in TYPES:
 		if _is_lowercase_string(t):
 			primitives_types.append(t)
 	return primitives_types
-
-
-#func _ready():
-#	rect_min_size = Vector2(0,80)
-

@@ -88,6 +88,7 @@ func configure_from_serialized(serialized_node:Dictionary) -> bool:
 func serialize_def() -> Dictionary:
 	var main_dic:Dictionary = .serialize_def()
 	main_dic["editor_grid_size"] = [editor_grid_size.x, editor_grid_size.y]
+	main_dic["type"]             = "ConstValue"
 	return main_dic
 
 func _generate_user_inputs() -> Node:
@@ -143,7 +144,7 @@ func _regenerate_slots() -> void:
 	var constant_type:int = LXNode.type_to_value(outputs[0].logix_type)
 	set_slot(DEFAULT_SLOT_NUMBER,
 		false, INVALID_SLOT_TYPE, INVALID_SLOT_COLOR,
-		true, constant_type, _color_for_idx(constant_type))
+		true, constant_type, _color_for_type_value(constant_type))
 
 	for child in get_children():
 		remove_child(child)

@@ -66,6 +66,11 @@ func _remove_definitions():
 var lxnode_scene = preload("res://logix/lxnode.tscn")
 var lx_const_value_scene = preload("res://logix/lx_const_value.tscn")
 
+const node_types_classes = {
+	"Standard":        preload("res://logix/lxnode.tscn"),
+	"ConstValue":      preload("res://logix/lx_const_value.tscn"),
+	"GenericWithMenu": preload("res://logix/lx_generic_with_menu.tscn")
+}
 # FIXME That new function is CLEARLY not resilient at all,
 # However, I still don't know if we should go for a fail-fast or
 # best effort approach here...
@@ -74,16 +79,26 @@ func configure_from_serialized(serialized:Dictionary) -> bool:
 	var n_children:int = get_child_count()
 	LXNode.types_setup_from_serialized(serialized["types"])
 	for definition in serialized["definitions"]:
-		var node
+		if not definition.has("type"):
+			printerr("[BUG] Invalid node definition. 'type' is missing.")
+			printerr("Erroneous node definition : %s" % [str(definition)])
+			continue
+		var node_type:String = definition["type"]
+		if not node_types_classes.has(node_type):
+			printerr("[BUG] Unknown type name : %s" % node_type)
+			printerr("Erroneous node definition : %s" % [str(definition)])
+			continue
+
+		var node = node_types_classes[node_type].instance()
 		# FIXME Replace this stupid hack by a correct field !
-		if not definition.has("editor_grid_size"):
-			 node = lxnode_scene.instance()
-		else:
-			node = lx_const_value_scene.instance()
+		#if not definition.has("editor_grid_size"):
+		#	 node = lxnode_scene.instance()
+		#else:
+		#	node = lx_const_value_scene.instance()
 		add_child(node)
 		if node.configure_from_serialized(definition) == false:
 			remove_child(node)
-			printerr("Could not use definition : " + definition)
+			printerr("Could not use definition : %s" % [str(definition)])
 			continue
 	sort_by_short_names()
 	return true

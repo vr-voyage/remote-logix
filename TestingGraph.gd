@@ -420,9 +420,9 @@ func _report_bogus_line(
 	script_line:String):
 
 	printerr(
-		"Bogus " + instruction_name + " LINE.\n" +
-		"Expecting " + str(n_args_expected) + " arguments, " +
-		"got : " + str(n_args_actual) + "\n" +
+		"Bogus "      + instruction_name + " LINE.\n" +
+		"Expecting "  + str(n_args_expected) + " arguments, " +
+		"got : "      + str(n_args_actual) + "\n" +
 		"Raw line : " + script_line)
 
 func _parse_program_line(script_line:String, state:Dictionary):
