@@ -15,11 +15,16 @@ _global_script_classes=[ {
 "path": "res://logix/lx_const_value.gd"
 }, {
 "base": "LXNode",
+"class": "LXGeneric",
+"language": "GDScript",
+"path": "res://logix/lx_generic.gd"
+}, {
+"base": "LXGeneric",
 "class": "LXGenericOnConnect",
 "language": "GDScript",
 "path": "res://logix/lx_generic_on_connect.gd"
 }, {
-"base": "",
+"base": "LXGeneric",
 "class": "LXGenericWithMenu",
 "language": "GDScript",
 "path": "res://logix/lx_generic_with_menu.gd"
@@ -41,6 +46,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "LXConstValue": "",
+"LXGeneric": "",
 "LXGenericOnConnect": "",
 "LXGenericWithMenu": "",
 "LXNode": "",

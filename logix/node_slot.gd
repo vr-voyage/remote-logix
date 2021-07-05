@@ -14,6 +14,13 @@ func _setup(node_title:String, node_type:String):
 func _init(node_title:String, node_type:String):
 	_setup(node_title, node_type)
 
+func complete_dup():
+	var n          = get_script().new(self.title, self.logix_type)
+	n.title        = self.title
+	n.logix_type   = self.logix_type
+	n.generic      = self.generic
+	return n
+
 func config_from_serialized(serialized_slot:Dictionary) -> bool:
 	if not serialized_slot.has("name") or not serialized_slot.has("type"):
 		printerr(

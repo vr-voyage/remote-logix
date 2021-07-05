@@ -5,14 +5,14 @@ export(String) var logix_program_filename_prefix = "logix_program_"
 export(String) var logix_program_extension = "slx"
 
 export(NodePath) var path_graph
-onready var graph:GraphEdit = get_node(path_graph)
+onready var graph:GraphEdit = get_node(path_graph) as GraphEdit
 #onready var graph:GraphEdit = $"TabContainer/Maincontainer/Program"
 
 export(NodePath) var path_tabs
 onready var ui_tabs = get_node(path_tabs)
 
 export(NodePath) var path_scripts_list
-onready var ui_scripts_list:ItemList = get_node(path_scripts_list)
+onready var ui_scripts_list:ItemList = get_node(path_scripts_list) as ItemList
 
 export(NodePath) var path_script_selected_text
 onready var ui_script_selected_text:TextEdit = get_node(path_script_selected_text)
@@ -192,19 +192,43 @@ func load_definitions_from(filepath:String) -> bool:
 	useable_nodes.configure_from_serialized(parse_result.result)
 	return true
 
+# FIXME Get rid of this if possible...
+# I don't know how to do this correclty though.
+# Using the same 'slot type' and allowing connections to
+# anything sounds cool at first, but will just be a UX
+# nightmare, due to snapping.
+# Still, that might just resolve the issue altogether...
+
+func _register_generic_connections():
+	for i in range(1, len(LXNode.TYPES)):
+		graph.add_valid_connection_type(LXNode.GENERIC_NODE_TYPE, i)
 
 func _ready():
 	load_saved_definitions_nodes()
 	refresh_menus()
 	_ui_scripts_list_refresh()
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
+	_register_generic_connections()
 
 
 func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
-	printerr("Connection request between \n" + 
-		str(from) + ":" + str(from_slot) + "\n" +
-		str(to) + ":" + str(to_slot) + "\n")
-	graph.connect_node(from, from_slot, to, to_slot)
+	printerr(
+		"Connection request between \n%s:%d\n%s:%d" % 
+		[str(from), from_slot, str(to), to_slot])
+	var from_node:LXNode = graph.get_node(from) as LXNode
+	var to_node:LXNode   = graph.get_node(to) as LXNode
+	if from_node == null or to_node == null:
+		printerr("[BUG] Not connecting Logix nodes !")
+		return
+
+	var can_connect:bool = (
+		  from_node.can_connect_to_output(from_slot, to, to_slot)
+		and to_node.can_connect_to_input(to_slot, from, from_slot))
+
+	if can_connect:
+		from_node.connecting_output(from_slot, to_node, to_slot)
+		to_node.connecting_input(to_slot, from_node, from_slot)
+		graph.connect_node(from, from_slot, to, to_slot)
 
 func _on_GraphEdit_connection_to_empty(from, from_slot, release_position):
 	printerr("Connection to empty !")
@@ -216,6 +240,16 @@ func _on_GraphEdit_disconnection_request(from, from_slot, to, to_slot):
 	printerr("Requesting disconnection between :\n" +
 		str(from) + ":" + str(from_slot) + "\n" +
 		str(to) + ":" + str(to_slot) + "\n")
+	var from_node:LXNode = graph.get_node(from) as LXNode
+	var to_node:LXNode   = graph.get_node(to) as LXNode
+	if from_node != null and to_node != null:
+		from_node.disconnecting_output(from_slot)
+		to_node.disconnecting_input(to_slot)
+	else:
+		printerr("[BUG] Could not find the Logix nodes being disconnected !")
+		# We still continue, because we have to honor
+		# the disconnection.
+
 	graph.disconnect_node(from, from_slot, to, to_slot)
 
 func _on_GraphEdit_popup_request(position):

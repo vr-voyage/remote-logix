@@ -19,6 +19,8 @@ var node_id:int = INVALID_NODE_ID setget set_node_id, get_node_id
 
 enum DIRECTION { INVALID, INPUT, OUTPUT, COUNT }
 
+const GENERIC_NODE_TYPE:int = -1024
+
 func _generate_default_node_id():
 	# Oh boy, I got owned by this one.
 	# Turns out that the hashing system Godot use is
@@ -190,7 +192,25 @@ func _title_name() -> String:
 		return generic_part.get_extension() + specialization_part
 
 # TBD : Move away ?
-var generic_class_names:Array = Array()
+var generic_class_names:Array = ["",""]
+
+func can_connect_to_input(input_idx:int, from_node:LXNode, from_output_idx:int) -> bool:
+	return true
+
+func can_connect_to_output(output_idx:int, to_node:LXNode, to_input_idx:int) -> bool:
+	return true
+
+func connecting_input(input_idx:int, from_node:LXNode, from_output_idx:int) -> void:
+	pass
+
+func connecting_output(output_idx:int, to_node:LXNode, to_input_idx:int) -> void:
+	pass
+
+func disconnecting_input(input_idx:int) -> void:
+	pass
+
+func disconnecting_output(output_idx:int) -> void:
+	pass
 
 func set_class_name(new_logix_class_name:String):
 	var class_names:PoolStringArray = new_logix_class_name.split(",")
@@ -363,6 +383,12 @@ func get_input_name(input_slot_idx:int) -> String:
 
 func get_output_name(output_slot_idx:int) -> String:
 	return _get_name_from_list(output_slot_idx, outputs)
+
+func get_output_type(output_slot_idx:int) -> String:
+	return outputs[output_slot_idx].logix_type
+
+func get_input_type(input_slot_idx:int) -> String:
+	return inputs[input_slot_idx].logix_type
 
 func get_input_idx(input_name:String) -> int:
 	for i in len(inputs):

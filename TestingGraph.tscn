@@ -551,10 +551,10 @@ margin_bottom = 462.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="ColorPicker" type="ColorPicker" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
-margin_left = 26.0
-margin_top = 12.0
-margin_right = 888.0
-margin_bottom = 474.0
+margin_left = 30.0
+margin_top = 16.0
+margin_right = 892.0
+margin_bottom = 478.0
 size_flags_horizontal = 3
 
 [node name="MarginRight" type="Control" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
@@ -634,8 +634,8 @@ script = ExtResource( 4 )
 [connection signal="text_changed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_changed"]
 [connection signal="text_entered" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotNameInput" to="." method="_on_SlotNameInput_text_entered"]
 [connection signal="item_selected" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/SlotTypeOptions" to="." method="_on_SlotTypeOptions_item_selected"]
-[connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_DeleteSlotButton_pressed"]
+[connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/NodeEditor/SlotsEditor/SelectedSlotEditor/HBoxContainer/DeleteSlotButton" to="." method="_on_Button_pressed"]
 [connection signal="item_selected" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/List" to="." method="_on_List_item_selected"]
 [connection signal="pressed" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/AddButton" to="." method="_on_TypesEditor_AddButton_pressed"]
 [connection signal="text_entered" from="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NameInput" to="." method="_on_TypeNameInput_text_entered"]

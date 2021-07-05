@@ -63,13 +63,11 @@ func _remove_definitions():
 	for child in get_children():
 		remove_child(child)
 
-var lxnode_scene = preload("res://logix/lxnode.tscn")
-var lx_const_value_scene = preload("res://logix/lx_const_value.tscn")
-
 const node_types_classes = {
-	"Standard":        preload("res://logix/lxnode.tscn"),
-	"ConstValue":      preload("res://logix/lx_const_value.tscn"),
-	"GenericWithMenu": preload("res://logix/lx_generic_with_menu.tscn")
+	"Standard":         preload("res://logix/lxnode.tscn"),
+	"ConstValue":       preload("res://logix/lx_const_value.tscn"),
+	"GenericWithMenu":  preload("res://logix/lx_generic_with_menu.tscn"),
+	"GenericOnConnect": preload("res://logix/lx_generic_on_connect.tscn")
 }
 # FIXME That new function is CLEARLY not resilient at all,
 # However, I still don't know if we should go for a fail-fast or
