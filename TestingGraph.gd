@@ -101,7 +101,6 @@ func _ui_refresh_nodes_list_keep_selection() -> void:
 
 
 func _ui_refresh_types_lists() -> void:
-
 	var previous_edited_slot_type_idx:int = ui_slot_types_option.selected
 	ui_type_editor_list.clear()
 	ui_slot_types_option.clear()
@@ -129,6 +128,7 @@ func refresh_menus() -> void:
 	#prepare_useable_nodes()
 	prepare_popup_menu()
 	prepare_editor()
+	$TabContainer/NodeAddMenu.prepare_using_logix_nodes(useable_nodes.get_children())
 
 func save_definitions_to(filepath:String) -> bool:
 	var json_definitions:String = to_json(useable_nodes.serialize())
