@@ -113,6 +113,9 @@ func instantiate_from_idx(idx:int) -> LXNode:
 
 	return get_child(idx).complete_dup()
 
+func instantiate(definition:LXNode) -> LXNode:
+	return definition.complete_dup()
+
 func add_new() -> int:
 	var n_nodes:int = get_child_count()
 	var new_node:LXNode = LXNode.new()

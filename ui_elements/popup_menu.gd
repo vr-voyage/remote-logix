@@ -1,6 +1,8 @@
 extends Control
 
-onready var ui_tree = $"VBoxContainer/Tree" as Tree
+onready var ui_tree = $"ScrollContainer/VBoxContainer/Tree" as Tree
+
+signal node_selected(node)
 
 # Note
 # I'm using Tree and TreeItem because I'm way too lazy to remake
@@ -92,16 +94,25 @@ func prepare_using_logix_nodes(logix_nodes_definitions:Array):
 func _ready():
 	root_item = ui_tree.create_item(null)
 
+func _on_Tree_item_activated():
+	var selected_item:TreeItem = ui_tree.get_selected()
+	if (selected_item == null):
+		printerr("[BUG] Tree is broken. Sent 'activated signal with no selection")
+		return
 
-
-func _on_Tree_item_double_clicked():
-	printerr("Beep !")
-	printerr($VBoxContainer/Tree.get_selected().get_metadata(0))
+	var selected_node_def:LXNode = selected_item.get_metadata(0) as LXNode
+	if selected_node_def != null:
+		emit_signal("node_selected", selected_node_def)
 	pass # Replace with function body.
 
+# FIXME
+# This behaviour should not be set there.
+# Emit the appropriate signals
+# Catch them in the main UI
+func _on_Tree_focus_exited():
+	release_focus()
+	hide()
 
-func _on_Tree_item_activated():
-	printerr("Boop !")
-	printerr("Boop !")
-	printerr($VBoxContainer/Tree.get_selected().get_metadata(0))
+func _on_Control_focus_entered():
+	ui_tree.grab_focus()
 	pass # Replace with function body.

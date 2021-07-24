@@ -1,5 +1,7 @@
 extends Control
 
+onready var ui_new_popup_menu:PopupPanel = $NodeAddMenu
+
 export(String) var logix_program_dirpath = "user://"
 export(String) var logix_program_filename_prefix = "logix_program_"
 export(String) var logix_program_extension = "slx"
@@ -128,7 +130,7 @@ func refresh_menus() -> void:
 	#prepare_useable_nodes()
 	prepare_popup_menu()
 	prepare_editor()
-	$TabContainer/NodeAddMenu.prepare_using_logix_nodes(useable_nodes.get_children())
+	ui_new_popup_menu.prepare_using_logix_nodes(useable_nodes.get_children())
 
 func save_definitions_to(filepath:String) -> bool:
 	var json_definitions:String = to_json(useable_nodes.serialize())
@@ -252,10 +254,15 @@ func _on_GraphEdit_disconnection_request(from, from_slot, to, to_slot):
 
 	graph.disconnect_node(from, from_slot, to, to_slot)
 
+
+
 func _on_GraphEdit_popup_request(position):
 	printerr("Requesting popup")
-	ui_popup_menu.set_position(position)
-	ui_popup_menu.show()
+	ui_new_popup_menu.set_position(position)
+	ui_new_popup_menu.show()
+	ui_new_popup_menu.grab_focus()
+#	ui_popup_menu.set_position(position)
+#	ui_popup_menu.show()
 
 func _on_GraphEdit_copy_nodes_request():
 	printerr("Requesting node copy... ?")
@@ -1139,3 +1146,23 @@ func _on_LoadExampleButton_pressed():
 	_load_script(_read_file_content("res://programs/logix_program_Example.slx"))
 	_focus_tab_logix()
 
+
+
+func _on_NodeAddMenu_focus_exited():
+	printerr("Meep")
+	#ui_new_popup_menu.hide()
+	pass # Replace with function body.
+
+
+func _on_NodeAddMenu_focus_entered():
+	printerr("FOCUSED")
+	pass # Replace with function body.
+
+
+func _on_NodeAddMenu_node_selected(node_definition:LXNode):
+	var logix_node:LXNode = useable_nodes.instantiate(node_definition)
+	# FIXME Just define a spawn position
+	logix_node.offset = ui_new_popup_menu.rect_position + graph.scroll_offset
+	graph.add_child(logix_node)
+	ui_new_popup_menu.hide()
+	pass # Replace with function body.
