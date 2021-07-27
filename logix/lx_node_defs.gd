@@ -69,13 +69,16 @@ const node_types_classes = {
 	"GenericWithMenu":  preload("res://logix/lx_generic_with_menu.tscn"),
 	"GenericOnConnect": preload("res://logix/lx_generic_on_connect.tscn")
 }
+
+func configure_types_from_serialized(serialized:Dictionary) -> void:
+	LXNode.types_setup_from_serialized(serialized["types"])
+
 # FIXME That new function is CLEARLY not resilient at all,
 # However, I still don't know if we should go for a fail-fast or
 # best effort approach here...
-func configure_from_serialized(serialized:Dictionary) -> bool:
+func configure_definitions_from_serialized(serialized:Dictionary) -> bool:
 	_remove_definitions()
 	var n_children:int = get_child_count()
-	LXNode.types_setup_from_serialized(serialized["types"])
 	for definition in serialized["definitions"]:
 		if not definition.has("type"):
 			printerr("[BUG] Invalid node definition. 'type' is missing.")

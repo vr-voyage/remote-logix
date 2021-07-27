@@ -5,6 +5,7 @@ onready var ui_new_popup_menu:PopupPanel = $NodeAddMenu
 export(String) var logix_program_dirpath = "user://"
 export(String) var logix_program_filename_prefix = "logix_program_"
 export(String) var logix_program_extension = "slx"
+export(String) var types_definitions_filepath = "res://data/types.json"
 
 export(NodePath) var path_graph
 onready var graph:GraphEdit = get_node(path_graph) as GraphEdit
@@ -189,9 +190,25 @@ func load_definitions_from(filepath:String) -> bool:
 			str(parse_result.result))
 		return false
 
-	# FIXME We just nuked useful error management
+	# FIXME Had to nuke useful error management for a quick release
 	# See the method definition.
-	useable_nodes.configure_from_serialized(parse_result.result)
+	useable_nodes.configure_definitions_from_serialized(parse_result.result)
+	return true
+
+func load_types_definitions_from(filepath:String) -> bool:
+	var content = _read_json_content(filepath)
+	if content == null:
+		return false
+	if not content is Dictionary:
+		printerr("Wrong format for types")
+		return false
+
+	var defs:Dictionary = content as Dictionary
+	if defs.get("format", -1) != 2:
+		printerr("Only format 2 is supported right now")
+		return false
+
+	useable_nodes.configure_types_from_serialized(defs)
 	return true
 
 # FIXME Get rid of this if possible...
@@ -206,11 +223,13 @@ func _register_generic_connections():
 		graph.add_valid_connection_type(LXNode.GENERIC_NODE_TYPE, i)
 
 func _ready():
+	load_types_definitions_from(types_definitions_filepath)
 	load_saved_definitions_nodes()
 	refresh_menus()
 	_ui_scripts_list_refresh()
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	_register_generic_connections()
+	OS.low_processor_usage_mode = true
 
 
 func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
@@ -1096,6 +1115,20 @@ func _read_file_content(filepath:String):
 	f.close()
 	return content
 
+func _read_json_content(filepath:String):
+	var raw_content:String = _read_file_content(filepath) as String
+	if raw_content == null:
+		return null
+	var parse_results:JSONParseResult = JSON.parse(raw_content)
+	if parse_results.error != OK:
+		printerr(
+			"Could not parse JSON file %s\n" +
+			"At line %d :\n" +
+			"%s"
+			% [filepath, parse_results.error_line, parse_results.error_string])
+		return null
+	return parse_results.result
+
 func _on_files_dropped(filepaths:PoolStringArray, screen) -> void:
 	# FIXME Dubious check. Check if that actually happen
 	if len(filepaths) == 0:
@@ -1145,8 +1178,6 @@ func _focus_tab_logix():
 func _on_LoadExampleButton_pressed():
 	_load_script(_read_file_content("res://programs/logix_program_Example.slx"))
 	_focus_tab_logix()
-
-
 
 func _on_NodeAddMenu_focus_exited():
 	printerr("Meep")
