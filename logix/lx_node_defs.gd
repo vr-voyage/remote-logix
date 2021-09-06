@@ -23,7 +23,7 @@ func convert_node_to_lxconst(node:LXNode) -> bool:
 		return false
 
 	var new_node:LXConstValue = LXConstValue.new()
-	new_node._copy_from_lxnode(node)
+	var _unchecked = new_node._copy_from_lxnode(node)
 	node.replace_by(new_node)
 	return true
 
@@ -36,7 +36,6 @@ func _compare_short_names(idx_a:int, idx_b:int):
 
 func sort_by_short_names():
 	var sorted_indices = range(0,get_child_count())
-	var i = 0
 	sorted_indices.sort_custom(self, "_compare_short_names")
 	sorted_nodes_indices.resize(0)
 	sorted_nodes_indices.append_array(sorted_indices)
@@ -67,7 +66,9 @@ const node_types_classes = {
 	"Standard":         preload("res://logix/lxnode.tscn"),
 	"ConstValue":       preload("res://logix/lx_const_value.tscn"),
 	"GenericWithMenu":  preload("res://logix/lx_generic_with_menu.tscn"),
-	"GenericOnConnect": preload("res://logix/lx_generic_on_connect.tscn")
+	"GenericOnConnect": preload("res://logix/lx_generic_on_connect.tscn"),
+	"GenericWrite":     preload("res://logix/lx_generic_write.tscn"),
+	"ValueRegister":    preload("res://logix/lx_register.tscn")
 }
 
 func configure_types_from_serialized(serialized:Dictionary) -> void:
@@ -78,7 +79,6 @@ func configure_types_from_serialized(serialized:Dictionary) -> void:
 # best effort approach here...
 func configure_definitions_from_serialized(serialized:Dictionary) -> bool:
 	_remove_definitions()
-	var n_children:int = get_child_count()
 	for definition in serialized["definitions"]:
 		if not definition.has("type"):
 			printerr("[BUG] Invalid node definition. 'type' is missing.")

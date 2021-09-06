@@ -105,7 +105,7 @@ func _relay_client_show_connected():
 	_relay_client_enable_new_connections(false)
 	ui_relay_client_status_color.color = connected_color
 
-func _relay_client_connection_closed(was_clean_closed:bool):
+func _relay_client_connection_closed(_was_clean_closed:bool):
 	log_msg("Connection closed", 2)
 	_relay_client_show_disconnected()
 
@@ -121,7 +121,7 @@ func _relay_client_disconnect() -> void:
 	log_msg("Disconnecting", 2)
 	_relay_client_show_disconnected()
 
-func _relay_client_connection_established(protocol:String) -> void:
+func _relay_client_connection_established(_protocol:String) -> void:
 	log_msg("Connected to relay server !", 2)
 	_relay_client_show_connected()
 
@@ -140,10 +140,11 @@ func _ready():
 		_enable_server_section()
 		_start_server()
 
-	_relay_client.connect("connection_closed", self, "_relay_client_connection_closed")
-	_relay_client.connect("connection_error", self, "_relay_client_connection_error")
-	_relay_client.connect("connection_established", self, "_relay_client_connection_established")
-	_relay_client.connect("server_disconnected", self, "_relay_client_server_disconected")
+	var _unchecked
+	_unchecked = _relay_client.connect("connection_closed", self, "_relay_client_connection_closed")
+	_unchecked = _relay_client.connect("connection_error", self, "_relay_client_connection_error")
+	_unchecked = _relay_client.connect("connection_established", self, "_relay_client_connection_established")
+	_unchecked = _relay_client.connect("server_disconnected", self, "_relay_client_server_disconected")
 
 func _connected(id, proto):
 	# This is called when a new peer connects, "id" will be the assigned peer id,
@@ -171,7 +172,7 @@ func _on_data(id):
 	log_msg("Got data from client %d: %s" % [id, pkt.get_string_from_utf8()], 2)
 
 
-func _process(delta):
+func _process(_delta):
 	# Call this in _process or _physics_process.
 	# Data transfer, and signals emission will only happen when calling this function.
 	_server.poll()
@@ -192,7 +193,7 @@ func send_string(text_data:String) -> int:
 
 
 	if _relay_client_connected():
-		_relay_client.get_peer(1).put_packet(text_packet)
+		var _unchecked = _relay_client.get_peer(1).put_packet(text_packet)
 		log_msg("[Through relay connection] %s" % [text_data])
 		sent_n_times += 1
 

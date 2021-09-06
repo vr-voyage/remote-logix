@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://logix/lx_register.gd" type="Script" id=1]
+
+[node name="LXRegister" type="GraphNode"]
+margin_right = 32.0
+margin_bottom = 30.0
+script = ExtResource( 1 )

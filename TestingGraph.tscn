@@ -51,7 +51,6 @@ __meta__ = {
 }
 
 [node name="Saved_Programs" type="VBoxContainer" parent="TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -99,6 +98,7 @@ margin_bottom = 20.0
 text = "Load example program"
 
 [node name="LogiX" type="VBoxContainer" parent="TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -552,10 +552,10 @@ margin_bottom = 462.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="ColorPicker" type="ColorPicker" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]
-margin_left = 114.0
-margin_top = 100.0
-margin_right = 976.0
-margin_bottom = 562.0
+margin_left = 146.0
+margin_top = 132.0
+margin_right = 1008.0
+margin_bottom = 594.0
 size_flags_horizontal = 3
 
 [node name="MarginRight" type="Control" parent="TabContainer/Nodes_editor/ScrollContainer/VBoxContainer/TypesEditor/NeedMargins"]

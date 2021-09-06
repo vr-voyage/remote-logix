@@ -123,9 +123,9 @@ func prepare_editor() -> void:
 
 func load_saved_definitions_nodes():
 	if not load_definitions_from(definitions_filepath):
-		_copy_base_definitions(base_definitions_filepath, definitions_filepath)
+		var _unchecked = _copy_base_definitions(base_definitions_filepath, definitions_filepath)
 		if not load_definitions_from(definitions_filepath):
-			load_definitions_from(base_definitions_filepath)
+			_unchecked = load_definitions_from(base_definitions_filepath)
 
 func refresh_menus() -> void:
 	#prepare_useable_nodes()
@@ -192,7 +192,7 @@ func load_definitions_from(filepath:String) -> bool:
 
 	# FIXME Had to nuke useful error management for a quick release
 	# See the method definition.
-	useable_nodes.configure_definitions_from_serialized(parse_result.result)
+	var _unchecked = useable_nodes.configure_definitions_from_serialized(parse_result.result)
 	return true
 
 func load_types_definitions_from(filepath:String) -> bool:
@@ -219,15 +219,27 @@ func load_types_definitions_from(filepath:String) -> bool:
 # Still, that might just resolve the issue altogether...
 
 func _register_generic_connections():
+	# FIXME Register this in the JSON files, parse it from there
 	for i in range(1, len(LXNode.TYPES)):
 		graph.add_valid_connection_type(LXNode.GENERIC_NODE_TYPE, i)
+	
+	# Use to Write direct values
+	# References always use a cast, so we can deal with them using
+	# way
+	var type_ivalue_dummy:int = LXNode.type_to_value("IValue'1,dummy")
+	for i in range(1, len(LXNode.TYPES)):
+		var t:String = LXNode.TYPES[i]
+		if t.begins_with("IValue'1,") and not t.ends_with("dummy"):
+			printerr("Adding connection between IValue'dummy and %s" % [LXNode._type_name(i)])
+			graph.add_valid_connection_type(type_ivalue_dummy, i)
+
 
 func _ready():
-	load_types_definitions_from(types_definitions_filepath)
+	var _unchecked = load_types_definitions_from(types_definitions_filepath)
 	load_saved_definitions_nodes()
 	refresh_menus()
 	_ui_scripts_list_refresh()
-	get_tree().connect("files_dropped", self, "_on_files_dropped")
+	_unchecked = get_tree().connect("files_dropped", self, "_on_files_dropped")
 	_register_generic_connections()
 	OS.low_processor_usage_mode = true
 
@@ -249,12 +261,12 @@ func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
 	if can_connect:
 		from_node.connecting_output(from_slot, to_node, to_slot)
 		to_node.connecting_input(to_slot, from_node, from_slot)
-		graph.connect_node(from, from_slot, to, to_slot)
+		var _unchecked = graph.connect_node(from, from_slot, to, to_slot)
 
-func _on_GraphEdit_connection_to_empty(from, from_slot, release_position):
+func _on_GraphEdit_connection_to_empty(_from, _from_slot, _release_position):
 	printerr("Connection to empty !")
 
-func _on_GraphEdit_connection_from_empty(to, to_slot, release_position):
+func _on_GraphEdit_connection_from_empty(_to, _to_slot, _release_position):
 	printerr("Connection from empty !")
 
 func _on_GraphEdit_disconnection_request(from, from_slot, to, to_slot):
@@ -485,7 +497,7 @@ func _report_bogus_line(
 		"got : "      + str(n_args_actual) + "\n" +
 		"Raw line : " + script_line)
 
-func _parse_program_line(script_line:String, state:Dictionary):
+func _parse_program_line(script_line:String, _state:Dictionary):
 	var args:PoolStringArray = script_line.split(script_fields_separator)
 	ui_program_name_text.text = _script_base64_to_user_input(args[1])
 	return
@@ -697,7 +709,7 @@ func _on_SaveButton_pressed():
 		# FIXME Throw a real error message
 		printerr("Meep ! Provide a name for the program")
 		return
-	save_program(program_name)
+	var _unchecked = save_program(program_name)
 
 # ... WTF Godot... Why can't I just call this on GraphEdit !?
 func _graph_get_selected_nodes() -> Array:
@@ -742,7 +754,6 @@ func modify_edited_slot():
 		printerr("No useable node selected")
 		return
 
-	var node:LXNode = selected_node_model
 	var slot_name:String = ui_edited_node_class_name_input.text
 	var slot_type:int = ui_slot_types_option.get_selected_id()
 	
@@ -846,7 +857,7 @@ func _on_Inputs_AddButton_pressed():
 			"[BUG] Can't add an input slot if " +
 			"no node is currently being edited")
 		return
-	selected_node_model.add_input()
+	var _unchecked = selected_node_model.add_input()
 	_ui_refresh_nodes_look()
 	_ui_refresh_edited_node_slots_list(
 		ui_edited_node_slots_input_list,
@@ -857,7 +868,7 @@ func _on_Outputs_AddButton_pressed():
 		printerr(
 			"[BUG] Can't add an output slot if " +
 			"no node is currently being edited")
-	selected_node_model.add_output()
+	var _unchecked = selected_node_model.add_output()
 	_ui_refresh_nodes_look()
 	_ui_refresh_edited_node_slots_list(
 		ui_edited_node_slots_output_list,
@@ -904,7 +915,7 @@ func _on_SlotNameInput_text_entered(new_text):
 	_ui_refresh_edited_node_refresh_slots()
 	_ui_refresh_nodes_look()
 
-func _on_SlotTypeOptions_item_selected(index):
+func _on_SlotTypeOptions_item_selected(_index):
 	if edited_slot == invalid_node:
 		printerr("[BUG] Trying to edit a null slot !")
 	edited_slot.logix_type = LXNode.TYPES[ui_slot_types_option.selected]
@@ -934,16 +945,17 @@ func _editing_type() -> bool:
 	return edited_type_idx != 0
 
 func _save_type_changes():
+	var _unchecked
 	if _editing_type():
-		LXNode.change_type_idx_name(edited_type_idx, ui_edited_type_name.text)
-		LXNode.change_type_idx_color(edited_type_idx, ui_edited_type_color.color)
-	save_definitions_to(definitions_filepath)
+		_unchecked = LXNode.change_type_idx_name(edited_type_idx, ui_edited_type_name.text)
+		_unchecked = LXNode.change_type_idx_color(edited_type_idx, ui_edited_type_color.color)
+	_unchecked = save_definitions_to(definitions_filepath)
 
 func _on_TypesEditor_AddButton_pressed():
 	# Small hack to avoid losing changes
 	if _editing_type():
 		# FIXME Just make one function that save the current state
-		LXNode.change_type_idx_name(edited_type_idx, ui_edited_type_name.text)
+		var _unchecked = LXNode.change_type_idx_name(edited_type_idx, ui_edited_type_name.text)
 		
 	var added_idx:int = LXNode.add_logix_type("NewType", Color(0.5,0.5,0.5,1))
 	_ui_refresh_types_lists()
@@ -964,16 +976,16 @@ func _on_List_item_selected(index):
 func _on_NodesDefinitions_SaveButton_pressed():
 	_save_type_changes()
 
-func _on_ColorPicker_color_changed(color):
+func _on_ColorPicker_color_changed(_color):
 	_save_type_changes()
 	_ui_refresh_types_lists()
 
-func _on_TypeNameInput_text_entered(new_text):
+func _on_TypeNameInput_text_entered(_new_text):
 	_save_type_changes()
 	_ui_refresh_types_lists()
 
 func _on_Button_pressed():
-	load_program("user://logix_program_" + ui_program_name_text.text + ".slx")
+	var _unchecked = load_program("user://logix_program_" + ui_program_name_text.text + ".slx")
 	pass # Replace with function body.
 
 
@@ -986,7 +998,6 @@ func _on_CheckBox_toggled(button_pressed:bool):
 	printerr("Called CheckBox toggled")
 	if selected_node_model != invalid_node:
 		var selected_node_idx = useable_nodes.get_node_idx(selected_node_model)
-		var new_node:LXNode
 		var conversion_successful:bool = false
 		if button_pressed:
 			conversion_successful = useable_nodes.convert_node_to_lxconst(selected_node_model)
@@ -1050,7 +1061,7 @@ func _ui_scripts_list_refresh():
 		return
 
 	printerr("Refreshing")
-	dir.list_dir_begin()
+	var _unchecked = dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
 		if not dir.current_is_dir() and _script_name_looks_valid(file_name):
@@ -1078,7 +1089,7 @@ func _on_TabContainer_tab_selected(tab):
 var program_right_clicked:String
 func _on_FileDeletionConfirmation_confirmed():
 	if program_right_clicked != null:
-		delete_program(program_right_clicked)
+		var _unchecked = delete_program(program_right_clicked)
 		_ui_scripts_list_refresh()
 		ui_script_selected_text.text = ""
 
@@ -1129,7 +1140,7 @@ func _read_json_content(filepath:String):
 		return null
 	return parse_results.result
 
-func _on_files_dropped(filepaths:PoolStringArray, screen) -> void:
+func _on_files_dropped(filepaths:PoolStringArray, _screen) -> void:
 	# FIXME Dubious check. Check if that actually happen
 	if len(filepaths) == 0:
 		return
@@ -1154,7 +1165,7 @@ func _on_files_dropped(filepaths:PoolStringArray, screen) -> void:
 				if script_content == null:
 					printerr("Skipping %s since the file cannot be read" % [filepath])
 					continue
-				_save_script(program_filename, script_content)
+				var _unchecked = _save_script(program_filename, script_content)
 				_ui_scripts_list_refresh()
 
 func _ui_reset_editor():
@@ -1170,7 +1181,7 @@ func _on_ReloadDefaultsDefButton_pressed():
 	selected_node_model = invalid_node
 	edited_slot = invalid_slot
 	_ui_reset_editor()
-	load_definitions_from(base_definitions_filepath)
+	var _unchecked = load_definitions_from(base_definitions_filepath)
 
 func _focus_tab_logix():
 	ui_tabs.current_tab = TABS.LOGIX_NODES

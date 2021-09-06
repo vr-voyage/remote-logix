@@ -51,16 +51,22 @@ func _increase_generic_slots_connection(generic_idx:int, type_name:String):
 	if generic_slots_connections[generic_idx] == 1:
 		set_generic_slot_type(generic_idx, type_name)
 
+func _get_target_node_output_type(from_node:LXNode, from_output_idx:int) -> String:
+	return from_node.get_output_type(from_output_idx)
+
 func connecting_input(input_idx:int, from_node:LXNode, from_output_idx:int) -> void:
 	var generic_idx:int = inputs[input_idx].generic - 1
 	if generic_idx >= 0:
-		var from_type:String = from_node.get_output_type(from_output_idx)
+		var from_type:String = _get_target_node_output_type(from_node, from_output_idx)
 		_increase_generic_slots_connection(generic_idx, from_type)
+
+func _get_target_node_input_type(to_node:LXNode, to_input_idx:int) -> String:
+	return to_node.get_input_type(to_input_idx)
 
 func connecting_output(output_idx:int, to_node:LXNode, to_input_idx:int) -> void:
 	var generic_idx:int = outputs[output_idx].generic - 1
 	if generic_idx >= 0:
-		var to_type:String = to_node.get_input_type(output_idx)
+		var to_type:String = _get_target_node_input_type(to_node, to_input_idx)
 		_increase_generic_slots_connection(generic_idx, to_type)
 
 func _decrease_generic_slots_connection(generic_idx:int):

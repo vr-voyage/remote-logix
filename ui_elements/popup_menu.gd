@@ -36,8 +36,8 @@ func _add_logix_nodes(logix_nodes:Array, tree_cache:Dictionary, tree:Tree = ui_t
 		var logix_node_classname:String = logix_node_name.get_extension()
 
 		if not tree_cache.has(logix_node_path):
-			printerr("Cache is broken and should have references for {0}" % logix_node_path)
-			return
+			printerr("Cache is broken and should have references for %s" % logix_node_path)
+			continue
 
 		var tree_parent:TreeItem = tree_cache[logix_node_path] as TreeItem
 		var new_item:TreeItem = tree.create_item(tree_parent)

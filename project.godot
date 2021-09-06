@@ -29,6 +29,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://logix/lx_generic_with_menu.gd"
 }, {
+"base": "LXGenericOnConnect",
+"class": "LXGenericWrite",
+"language": "GDScript",
+"path": "res://logix/lx_generic_write.gd"
+}, {
 "base": "GraphNode",
 "class": "LXNode",
 "language": "GDScript",
@@ -44,6 +49,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://logix/lx_pseudo_gen_primitives.gd"
 }, {
+"base": "LXGenericWithMenu",
+"class": "LXRegister",
+"language": "GDScript",
+"path": "res://logix/lx_register.gd"
+}, {
 "base": "Control",
 "class": "NodeSlot",
 "language": "GDScript",
@@ -54,9 +64,11 @@ _global_script_class_icons={
 "LXGeneric": "",
 "LXGenericOnConnect": "",
 "LXGenericWithMenu": "",
+"LXGenericWrite": "",
 "LXNode": "",
 "LXNodeDefs": "",
 "LXPseudoGenPrimitives": "",
+"LXRegister": "",
 "NodeSlot": ""
 }
 

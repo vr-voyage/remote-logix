@@ -227,7 +227,7 @@
 			]
 		},
 		{
-			"classname": "FrooxEngine.LogiX.Inpux.FloatInput",
+			"classname": "FrooxEngine.LogiX.Input.FloatInput",
 			"inputs": [
 
 			],
@@ -631,6 +631,110 @@
 			"type": "GenericOnConnect",
 			"generic": {
 				"default_types": ["object"]
+			}
+		},
+		{
+			"classname": "FrooxEngine.LogiX.Action.WriteValueNode`1",
+			"inputs": [
+				{
+					"name": "Write",
+					"type": "Impulse",
+					"generic": 0
+				},
+				{
+					"name": "Value",
+					"type": "dummy",
+					"generic": 1
+				}
+			],
+			"outputs": [
+				{
+					"name": "Target",
+					"type": "IValue`1",
+					"generic": 1
+				},
+				{
+					"name": "OnDone",
+					"type": "Impulse",
+					"generic": 0
+				},
+				{
+					"name": "OnFail",
+					"type": "Impulse",
+					"generic": 0
+				}
+			],
+			"type": "GenericWrite",
+			"generic": { "default_types": ["dummy"] }
+		},
+		{
+			"classname": "FrooxEngine.LogiX.WriteLatch`1",
+			"inputs": [
+				{
+					"name": "Set",
+					"type": "Impulse",
+					"generic": 0
+				},
+				{
+					"name": "Reset",
+					"type": "Impulse",
+					"generic": 0
+				},
+				{
+					"name": "SetValue",
+					"type": "dummy",
+					"generic": 1
+				},
+				{
+					"name": "ResetValue",
+					"type": "dummy",
+					"generic": 1
+				}
+			],
+			"outputs": [
+				{
+					"name": "Target",
+					"type": "IValue`1",
+					"generic": 1
+				},
+				{
+					"name": "OnSet",
+					"type": "Impulse",
+					"generic": 0
+				},
+				{
+					"name": "OnReset",
+					"type": "Impulse",
+					"generic": 0
+				}
+			],
+			"type": "GenericWrite",
+			"generic": { "default_types": ["dummy"] }
+		},
+		{
+			"classname": "FrooxEngine.LogiX.Data.ValueRegister`1",
+			"inputs": [
+				{
+					"name": "_WriteTo",
+					"type": "IValue`1",
+					"generic": 2
+				}
+			],
+			"outputs": [
+				{
+					"name": "*",
+					"type": "float",
+					"generic": 1
+				}
+			],
+			"type": "ValueRegister",
+			"generic": {
+				"menu": [
+					"_primitives",
+					"Slot",
+					"User"
+				],
+				"default_types": ["float", "IValue`1"]
 			}
 		}
 	],

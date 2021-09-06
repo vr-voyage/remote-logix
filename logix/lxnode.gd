@@ -58,7 +58,7 @@ static func add_logix_type(type_name:String, type_color:Color) -> int:
 	return added_idx
 
 static func _add_default_type():
-	add_logix_type("", Color(0,0,0,0))
+	var _unchecked = add_logix_type("", Color(0,0,0,0))
 
 static func _reset_types():
 	TYPES.clear()
@@ -104,7 +104,7 @@ static func types_setup_from_serialized(serialized:Array):
 	_reset_types()
 	serialized.sort_custom(LXNodeSorter, "_sort_serialized_types_by_names")
 	for element in serialized:
-		add_logix_type(
+		var _unchecked = add_logix_type(
 			element["name"],
 			_color_from_serialized(element["color"]))
 
@@ -142,6 +142,20 @@ static func _color_for_type_value(logix_type_value:int) -> Color:
 
 static func _color_for(logix_type_name:String) -> Color:
 	return _color_for_type_value(TYPES.find(logix_type_name))
+
+static func get_special_type(specialized_generic:String, type_idx:int) -> String:
+	var actual_idx:int = type_idx + 1
+	var types_names:PoolStringArray = specialized_generic.split(",")
+	var result:String = ""
+	if actual_idx < len(types_names):
+		result = types_names[actual_idx]
+	return result
+
+func _register_additional_types():
+	pass
+
+func _register_additional_connections(_graph:GraphEdit):
+	pass
 
 func _add_slot_to(list:Array) -> NodeSlot:
 	var node_to_add:NodeSlot = NodeSlot.new("undefined", TYPES[0])
@@ -194,22 +208,22 @@ func _title_name() -> String:
 # TBD : Move away ?
 var generic_class_names:Array = ["",""]
 
-func can_connect_to_input(input_idx:int, from_node:LXNode, from_output_idx:int) -> bool:
+func can_connect_to_input(_input_idx:int, _from_node:LXNode, _from_output_idx:int) -> bool:
 	return true
 
-func can_connect_to_output(output_idx:int, to_node:LXNode, to_input_idx:int) -> bool:
+func can_connect_to_output(_output_idx:int, _to_node:LXNode, _to_input_idx:int) -> bool:
 	return true
 
-func connecting_input(input_idx:int, from_node:LXNode, from_output_idx:int) -> void:
+func connecting_input(_input_idx:int, _from_node:LXNode, _from_output_idx:int) -> void:
 	pass
 
-func connecting_output(output_idx:int, to_node:LXNode, to_input_idx:int) -> void:
+func connecting_output(_output_idx:int, _to_node:LXNode, _to_input_idx:int) -> void:
 	pass
 
-func disconnecting_input(input_idx:int) -> void:
+func disconnecting_input(_input_idx:int) -> void:
 	pass
 
-func disconnecting_output(output_idx:int) -> void:
+func disconnecting_output(_output_idx:int) -> void:
 	pass
 
 func set_class_name(new_logix_class_name:String):

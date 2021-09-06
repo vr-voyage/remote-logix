@@ -72,4 +72,4 @@ func serialize_def() -> Dictionary:
 	main_conf["generic"]["menu"] = self.menu_types
 	main_conf["type"]    = "GenericWithMenu"
 	return main_conf
-	
+

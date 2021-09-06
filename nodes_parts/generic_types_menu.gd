@@ -44,7 +44,7 @@ func _signal_type_changed():
 	printerr("Emitting signal !")
 	emit_signal("type_defined", type_name_input.text)
 
-func _on_TypeNameInput_text_entered(new_text):
+func _on_TypeNameInput_text_entered(_new_text):
 	_signal_type_changed()
 
 func _on_TypeNameInput_focus_exited():

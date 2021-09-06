@@ -100,7 +100,7 @@ func _generate_user_inputs() -> Node:
 		"  Columns : " + str(n_columns) +
 		"  Inputs  : " + str(n_inputs))
 	input_grid.columns = n_columns
-	for i in range(0, n_inputs):
+	for _i in range(0, n_inputs):
 		# FIXME Create templates and use them here
 		# instead of setting everything manually
 		var line_edit:LineEdit = LineEdit.new()

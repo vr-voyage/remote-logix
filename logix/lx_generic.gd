@@ -41,22 +41,12 @@ func _register_and_duplicate_generic_slots(slots_list:Array, out_list:Array):
 			out_list.append(i)
 
 func set_io(new_inputs:Array, new_outputs: Array):
-	printerr("[lx_generic_with_menu] Calling set_io from generic")
 	var generic_idx:int = 0
 
 	_register_and_duplicate_generic_slots(
 		new_inputs, generic_slots[generic_inputs][generic_idx])
 	_register_and_duplicate_generic_slots(
 		new_outputs, generic_slots[generic_outputs][generic_idx])
-	#for i in range(0,len(new_inputs)):
-	#	if new_inputs[i].generic == 1:
-	#		var original_slot:NodeSlot = new_inputs[i]
-	#		var cloned_slot:NodeSlot   = original_slot.complete_dup()
-	#		new_inputs[i] = cloned_slot
-	#		generic_slots[0][0].append(i)
-	#for i in range(0,len(new_outputs)):
-	#	if new_outputs[i].generic == 1:
-	#		generic_slots[0][1].append(i)
 	.set_io(new_inputs, new_outputs)
 
 func serialize_def() -> Dictionary:

@@ -194,6 +194,10 @@
       "color": "ff808080"
     },
     {
+      "name": "dummy",
+      "color": "ffda02dd"
+    },
+    {
       "name": "float",
       "color": "ff03aaeb"
     },
